@@ -147,8 +147,8 @@ def gene_model(
                 ce_from_nwk=ce_from_nwk,
                 random_seed=randint(1, int(2**32 - 2)),
             )
-            theta = theta * 2
-            rho = rho * 2
+            theta = theta * 2    # ???????
+            rho = rho * 2        # ???????
 
             ts, hgt_edges = hgt_simulation.run_simulate(args)
     else:
@@ -744,3 +744,86 @@ def multi_gfs(
         lgfs = list(result)
 
     return lgfs
+
+
+def place_one_mutation(
+    n: int = 10,
+    processes: int = 10,
+    *args,
+    **kwargs,
+) -> tskit.TreeSequence:
+
+    if theta == rho == 0:
+        return ts
+
+    theta_total_events = theta
+    rho_total_events = rho * num_sites
+
+    root_proba = theta_total_events / (rho_total_events if rho_total_events != 0 else theta)
+    if not (0 <= root_proba <= 1):
+        raise ValueError(f"Invalid theta / rho resulting in a root probability of {root_proba}")
+
+    event_rate = rho_total_events + theta_total_events
+    theta_proba = theta_total_events / event_rate
+    rho_proba = rho_total_events / event_rate
+    event_rate /= num_sites
+
+    alleles = ["absent", "present"]
+    
+    gain_loss_model = msprime.MatrixMutationModel(
+        alleles,
+        root_distribution=[1, 0],
+        transition_matrix=[
+            [1 - theta_proba, theta_proba],
+            [rho_proba, 1 - rho_proba],
+        ],
+    )
+
+    tables = ts.dump_tables()
+
+    # Set the ancestral state for each site.
+    poisson = np.random.poisson(theta / (rho if rho != 0 else 1))
+    poisson = min(poisson, num_sites)
+
+    position = np.arange(0, num_sites, dtype="uint32")
+    position = np.random.choice(position, poisson, replace=False)
+    position.sort()
+
+    ancestral_state = [alleles[1]] * poisson
+    ancestral_state, ancestral_state_offset = tskit.pack_strings(ancestral_state)
+
+    tables.sites.set_columns(
+        position=position,
+        ancestral_state=ancestral_state,
+        ancestral_state_offset=ancestral_state_offset,
+    )
+    ts = tables.tree_sequence()
+    if not hgt_edges:
+        # Regular mutation simulation.
+        mts = msprime.sim_mutations(
+            ts,
+            rate=event_rate,
+            model=gain_loss_model,
+        )
+    else:
+        # Custom mutation simulation that supports hgt.
+        mts = hgt_mutations.sim_mutations(
+            ts,
+            hgt_edges=hgt_edges,
+            event_rate=event_rate,
+            model=gain_loss_model,
+        )
+
+    #### EXTRA:
+    # Create mask of single and double gene gain mutations that are not sentinel mutations
+    mask_double = _get_double_mask(derived_state, parent_state, metadata_state)
+
+    num_new_mutations = sum(mask_double)
+
+    
+    # No further processing needed
+    if not check_double_gene_gain and not relocate_double_gene_gain and not double_site_relocation:
+        return mts
+
+
+
