@@ -181,14 +181,18 @@ def gene_model(
     tables = ts.dump_tables()
 
     # Set the ancestral state for each site.
-    poisson = np.random.poisson(theta / (rho if rho != 0 else 1))
-    poisson = min(poisson, num_sites)
+    
+    ###### CHANGE:
+    
+    #poisson = np.random.poisson(theta / (rho if rho != 0 else 1))
+    #poisson = min(poisson, num_sites)
+    poisson = num_sites
 
     position = np.arange(0, num_sites, dtype="uint32")
     position = np.random.choice(position, poisson, replace=False)
     position.sort()
 
-    ancestral_state = [alleles[1]] * poisson
+    ancestral_state = [alleles[0]] * poisson
     ancestral_state, ancestral_state_offset = tskit.pack_strings(ancestral_state)
 
     tables.sites.set_columns(

@@ -260,6 +260,62 @@ class HGTMutationGenerator:
                     metadata=self.bin_sentinel_mask.to_bytes(1),
                 )
 
+    def place_one_mutation(self, tables, edges, discrete_genome=False):
+        """
+        edges: List of edges including hgt edges
+        """
+        # Insert a sentinel into the map for convenience.
+        map_position = np.hstack([self.rate_map.position, [tables.sequence_length]])
+        node_times = tables.nodes.time
+        
+        for pos, site in self.sites.items():  # Iteriere über die Sites
+
+            egdes_site = []
+            for edge in edges:
+                if (edge.left <= pos and edge.right >= pos + 1):
+                    egdes_site.append(edge)
+            
+            # Berechne die Wahrscheinlichkeiten basierend auf den Branch-Längen
+            branch_lengths = []
+            for edge in egdes_site:
+                branch_start = node_times[edge.child]
+                branch_end = node_times[edge.parent]
+                branch_length = branch_end - branch_start
+                branch_lengths.append(branch_length)
+        
+            # Normiere die Branch-Längen, um Wahrscheinlichkeiten zu erhalten
+            total_length = sum(branch_lengths)
+            probabilities = [length / total_length for length in branch_lengths]
+        
+            # Wähle einen zufälligen Ast basierend auf den Wahrscheinlichkeiten
+            chosen_index = np.random.choice(len(egdes_site), p=probabilities)
+            chosen_edge = egdes_site[chosen_index]
+        
+            # Zeit für die Mutation innerhalb des gewählten Branches zufällig auswählen
+            branch_start = node_times[chosen_edge.child]
+            branch_end = node_times[chosen_edge.parent]
+            mutation_time = self.rng.flat(branch_start, branch_end)[0]
+        
+            # Füge die Mutation hinzu
+            site.add_mutation(
+                node=chosen_edge.child,
+                time=mutation_time,
+                new=True,
+                metadata=self.bin_null_mask.to_bytes(1),
+            )
+
+        # Add a sentinel mutation directly above the leafs (falls benötigt)
+        leaf_node_ids = [i for i, f in enumerate(tables.nodes.flags) if f == 1]
+        for pos, site in self.sites.items():
+            for leaf in leaf_node_ids:
+                site.add_mutation(
+                    node=leaf,
+                    time=0.00000000001,
+                    new=True,
+                    metadata=self.bin_sentinel_mask.to_bytes(1),
+                )
+
+
     def find_bottom_mut(self, node_id, tree_parent, was_hgt):
         if node_id in self.bottom_mut:
             # Found mutation directly above current one
@@ -375,6 +431,7 @@ class HGTMutationGenerator:
         edges,
         root_nodes,
         seed,
+        one_mutation=False,
         keep=False,
         discrete_genome=False,
     ):
@@ -385,7 +442,10 @@ class HGTMutationGenerator:
 
         tables.sites.clear()
         tables.mutations.clear()
-        self.place_mutations(tables, edges, discrete_genome=discrete_genome)
+        if one_mutation:
+            self.place_one_mutation(tables, edges, discrete_genome=discrete_genome)
+        else:
+            self.place_mutations(tables, edges, discrete_genome=discrete_genome)
         self.apply_mutations(tables, edges, root_nodes)
         self.populate_tables(tables)
 
@@ -403,6 +463,7 @@ def sim_mutations(
     hgt_edges: List[tskit.Edge],
     event_rate: float,
     model: PythonMutationMatrixModel,
+    one_mutation = True
 ):
     tables = ts.dump_tables()
 
@@ -429,7 +490,17 @@ def sim_mutations(
         edges,
         root_nodes,
         randint(0, 4294967295),
+        one_mutation,
         keep=True,
         discrete_genome=True,
     )
     return ts
+
+
+
+
+
+
+
+
+
