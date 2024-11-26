@@ -304,6 +304,7 @@ class HGTMutationGenerator:
                 metadata=self.bin_null_mask.to_bytes(1),
             )
 
+
         # Add a sentinel mutation directly above the leafs (falls benötigt)
         leaf_node_ids = [i for i, f in enumerate(tables.nodes.flags) if f == 1]
         for pos, site in self.sites.items():
@@ -412,13 +413,20 @@ class HGTMutationGenerator:
         self.tree_parent = {}
         for bp in zip(breakpoints, breakpoints[1:]):
             self.tree_parent[bp] = [set() for _ in range(tables.nodes.num_rows)]
+
+            ### CHANGE:
             for root_node in root_nodes:
                 # Index= Child ID, Value: Set of parents.
                 self.follow_edge(bp, root_node, edges)
+        
+            root_node = max([e.parent for e in edges if e.left <= bp[0] and bp[1] <= e.right])
+            self.follow_edge(bp, root_node, edges)
+            
+        print(self.tree_parent)
         for pos, site in self.sites.items():
             assert pos == site.position
             # the responsible
-            k = [k for k in self.tree_parent.keys() if k[0] <= pos <= k[1]][0]
+            k = [k for k in self.tree_parent.keys() if k[0] <= pos < k[1]][0]
             self.choose_alleles(self.tree_parent[k], site, None)
 
     def rectify_hgt_edges(self, tables, edges):
