@@ -158,6 +158,8 @@ def gene_model(
         return ts
 
     theta_total_events = theta
+    if rho != 0:                 # CHANGE!
+        theta_total_events = 0   # CHANGE!
     rho_total_events = rho * num_sites
 
     root_proba = theta_total_events / (rho_total_events if rho_total_events != 0 else theta)
@@ -208,12 +210,25 @@ def gene_model(
         print("Not enough hgt_edges, such that there doesn't have to be exactly one mutation.")
     else:
         # Custom mutation simulation that supports hgt.
+        
+        # Simulate gains first (one per site):
         mts = hgt_mutations.sim_mutations(
             ts,
             hgt_edges=hgt_edges,
             event_rate=event_rate,
             model=gain_loss_model,
+            one_mutation=True
         )
+
+        # Add losses afterwards (random number per site):
+        if rho != 0:
+            mts = hgt_mutations.sim_mutations(
+                mts,
+                hgt_edges=hgt_edges,
+                event_rate=event_rate,
+                model=gain_loss_model,
+                one_mutation=False
+            )
 
     # No further processing needed
     if not check_double_gene_gain and not relocate_double_gene_gain and not double_site_relocation:

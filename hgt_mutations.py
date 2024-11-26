@@ -246,6 +246,7 @@ class HGTMutationGenerator:
                         time=time,
                         new=True,
                         metadata=self.bin_null_mask.to_bytes(1),
+                        #derived_state="absent",   # CHANGE!!!
                     )
                 index += 1
                 left = right
@@ -302,10 +303,11 @@ class HGTMutationGenerator:
                 time=mutation_time,
                 new=True,
                 metadata=self.bin_null_mask.to_bytes(1),
+                derived_state="present", # CHANGE!!
             )
 
-
-        # Add a sentinel mutation directly above the leafs (falls benötigt)
+        """
+        # Add a sentinel mutation directly above the leafs
         leaf_node_ids = [i for i, f in enumerate(tables.nodes.flags) if f == 1]
         for pos, site in self.sites.items():
             for leaf in leaf_node_ids:
@@ -315,7 +317,7 @@ class HGTMutationGenerator:
                     new=True,
                     metadata=self.bin_sentinel_mask.to_bytes(1),
                 )
-
+        """
 
     def find_bottom_mut(self, node_id, tree_parent, was_hgt):
         if node_id in self.bottom_mut:
@@ -340,6 +342,9 @@ class HGTMutationGenerator:
         # sort mutations by (increasing id if both are not null,
         #  decreasing time, increasing insertion order)
         site.mutations.sort(key=functools.cmp_to_key(cmp_mutation))
+
+        site.mutations.sort(key=lambda mutation: mutation.time, reverse=True)   # CHANGE!!
+        
         self.bottom_mut = {}
         for mut in site.mutations:
             # Traverse up the tree to find the parent mutation(s)
@@ -421,12 +426,11 @@ class HGTMutationGenerator:
         
             root_node = max([e.parent for e in edges if e.left <= bp[0] and bp[1] <= e.right])
             self.follow_edge(bp, root_node, edges)
-            
-        print(self.tree_parent)
+
         for pos, site in self.sites.items():
             assert pos == site.position
             # the responsible
-            k = [k for k in self.tree_parent.keys() if k[0] <= pos < k[1]][0]
+            k = [k for k in self.tree_parent.keys() if k[0] <= pos < k[1]][0]  # CHANGE!!!!!!!!!!!!!!!!!!
             self.choose_alleles(self.tree_parent[k], site, None)
 
     def rectify_hgt_edges(self, tables, edges):
@@ -447,14 +451,23 @@ class HGTMutationGenerator:
         self.rng = _msprime.RandomGenerator(seed)
         if keep:
             self.initialise_sites(tables)
-
+            
         tables.sites.clear()
         tables.mutations.clear()
         if one_mutation:
             self.place_one_mutation(tables, edges, discrete_genome=discrete_genome)
         else:
             self.place_mutations(tables, edges, discrete_genome=discrete_genome)
-        self.apply_mutations(tables, edges, root_nodes)
+            self.apply_mutations(tables, edges, root_nodes)
+
+        #for pos, site in self.sites.items():
+        #    print(site.mutations)
+
+        #self.apply_mutations(tables, edges, root_nodes)
+
+        #for pos, site in self.sites.items():
+        #    print(site.mutations)
+            
         self.populate_tables(tables)
 
         edges = self.rectify_hgt_edges(tables, edges)
