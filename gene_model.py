@@ -34,6 +34,7 @@ def gene_model(
     check_double_gene_gain=True,
     double_site_relocation=False,
     relocate_double_gene_gain=False,
+    core_genes=False,
 ) -> tskit.TreeSequence:
     """
     Simulate a gene model with gain and loss mutations using msprime.
@@ -191,7 +192,10 @@ def gene_model(
     position = np.random.choice(position, poisson, replace=False)
     position.sort()
 
-    ancestral_state = [alleles[0]] * poisson
+    if not core_genes:
+        ancestral_state = [alleles[0]] * poisson
+    else:
+        ancestral_state = [alleles[1]] * poisson
     ancestral_state, ancestral_state_offset = tskit.pack_strings(ancestral_state)
 
     tables.sites.set_columns(
@@ -200,6 +204,7 @@ def gene_model(
         ancestral_state_offset=ancestral_state_offset,
     )
     ts = tables.tree_sequence()
+    """
     if not hgt_edges:
         # Regular mutation simulation.
         mts = msprime.sim_mutations(
@@ -207,11 +212,12 @@ def gene_model(
             rate=event_rate,
             model=gain_loss_model,
         )
-        print("Not enough hgt_edges, such that there doesn't have to be exactly one mutation.")
+        print("0 hgt events observed.")
     else:
         # Custom mutation simulation that supports hgt.
-        
-        # Simulate gains first (one per site):
+    """    
+    # Simulate gains first (one per site):
+    if theta != 0:
         mts = hgt_mutations.sim_mutations(
             ts,
             hgt_edges=hgt_edges,
@@ -220,15 +226,23 @@ def gene_model(
             one_mutation=True
         )
 
-        # Add losses afterwards (random number per site):
-        if rho != 0:
-            mts = hgt_mutations.sim_mutations(
-                mts,
-                hgt_edges=hgt_edges,
-                event_rate=event_rate,
-                model=gain_loss_model,
-                one_mutation=False
-            )
+    # Add losses afterwards (random number per site):
+    if rho != 0 and theta != 0:
+        mts = hgt_mutations.sim_mutations(
+            mts,
+            hgt_edges=hgt_edges,
+            event_rate=event_rate,
+            model=gain_loss_model,
+            one_mutation=False
+        )
+    elif rho != 0 and theta == 0:
+        mts = hgt_mutations.sim_mutations(
+            ts,
+            hgt_edges=hgt_edges,
+            event_rate=event_rate,
+            model=gain_loss_model,
+            one_mutation=False
+        )
 
     # No further processing needed
     if not check_double_gene_gain and not relocate_double_gene_gain and not double_site_relocation:

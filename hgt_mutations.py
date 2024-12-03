@@ -204,7 +204,7 @@ class HGTMutationGenerator:
                 assert sid == site_id
                 site_id += 1
 
-    def place_mutations(self, tables, edges, discrete_genome=False):
+    def place_mutations(self, tables, edges, root_nodes, discrete_genome=False):
         """
         edges: List of edges including hgt edges
         """
@@ -250,7 +250,10 @@ class HGTMutationGenerator:
                     )
                 index += 1
                 left = right
+        
+        
         # Add a sentinel mutation at directly above the leafs
+        
         leaf_node_ids = [i for i, f in enumerate(tables.nodes.flags) if f == 1]
         for pos, site in self.sites.items():
             for leaf in leaf_node_ids:
@@ -260,6 +263,15 @@ class HGTMutationGenerator:
                     new=True,
                     metadata=self.bin_sentinel_mask.to_bytes(1),
                 )
+            # NEW:!!
+            root_node = max([e.parent for e in edges if e.left <= pos and pos < e.right])
+            site.add_mutation(
+                node=root_node,
+                time=node_times[root_node],
+                new=True,
+                metadata=self.bin_sentinel_mask.to_bytes(1),
+                derived_state=site.ancestral_state,
+            )
 
     def place_one_mutation(self, tables, edges, discrete_genome=False):
         """
@@ -457,8 +469,9 @@ class HGTMutationGenerator:
         if one_mutation:
             self.place_one_mutation(tables, edges, discrete_genome=discrete_genome)
         else:
-            self.place_mutations(tables, edges, discrete_genome=discrete_genome)
+            self.place_mutations(tables, edges, root_nodes, discrete_genome=discrete_genome)
             self.apply_mutations(tables, edges, root_nodes)
+
 
         #for pos, site in self.sites.items():
         #    print(site.mutations)
@@ -502,8 +515,9 @@ def sim_mutations(
     edges.extend(hgt_edges)
 
     child_ids = {e.child for e in edges}
-    root_nodes = list({e.parent for e in edges if e.parent not in child_ids})
 
+    root_nodes = list({e.parent for e in edges if e.parent not in child_ids})
+ 
     hgt_generator = HGTMutationGenerator(rate_map=rate_map, model=gain_loss_model)
 
     ts = hgt_generator.generate(
