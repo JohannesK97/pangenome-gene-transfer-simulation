@@ -188,7 +188,11 @@ def simulator_SBI(theta, rho, num_samples, hgt_rate):
 
 
 def simulate_and_store(theta, rho, num_samples, hgt_rate, output_file):
+    
     result = simulator_SBI(theta, rho, num_samples, hgt_rate)
+    
+    np.set_printoptions(threshold=np.inf, linewidth=np.inf)
+    
     with open(output_file, 'a') as f:
         f.write(f"hgt_rate {hgt_rate}: {result}\n")
 
@@ -206,14 +210,14 @@ def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samp
 
 if __name__ == '__main__':
     
-    num_simulations = 20
+    num_simulations = 500
     
-    hgt_rate_max = 0.01 # Maximum hgt rate
+    hgt_rate_max = 0.1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
-    theta = 1
+    theta = 100
     rho = 0.1
-    num_samples = 5
+    num_samples = 20
     
     prior = BoxUniform(low=hgt_rate_min * torch.ones(1), high=hgt_rate_max * torch.ones(1))
 
