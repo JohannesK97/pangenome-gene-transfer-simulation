@@ -18,7 +18,7 @@ from gfs import gfs_from_matrix
 
 alleles = ["absent", "present"]
 
-
+@profile
 def gene_model(
     theta: int,
     rho: float,
@@ -148,10 +148,11 @@ def gene_model(
                 ce_from_nwk=ce_from_nwk,
                 random_seed=randint(1, int(2**32 - 2)),
             )
-            theta = theta * 2
-            rho = rho * 2
+            #theta = theta * 2
+            #rho = rho * 2
 
             ts, hgt_edges = hgt_simulation.run_simulate(args)
+            #print("HGT simulation done")
     else:
         raise ValueError("Neither a TreeSequence, nor simulation parameters were provided.")
 
@@ -244,41 +245,13 @@ def gene_model(
             one_mutation=False
         )
 
-    # No further processing needed
-    if not check_double_gene_gain and not relocate_double_gene_gain and not double_site_relocation:
-        return mts
+    return mts
 
-    tables = mts.dump_tables()
-    derived_state, parent_state, metadata_state = _unpack_tables(tables)
 
-    # Create mask of single and double gene gain mutations that are not sentinel mutations
-    mask_double = _get_double_mask(derived_state, parent_state, metadata_state)
-
-    num_new_mutations = sum(mask_double)
-
-    if check_double_gene_gain and len(tables.mutations) * 0.01 <= num_new_mutations:
-        warnings.warn(
-            f"""{num_new_mutations} double mutation (present -> present) occured. """
-            f"""It is recommended to increase the num_sites to {int(theta * 10 / (rho if rho != 0 else 1))} or higher. """
-            """Alternatily use the double_site_relocation or relocate_double_gene_gain option.""",
-            RuntimeWarning,
-        )
-
-    if not (double_site_relocation or relocate_double_gene_gain):
-        return mts
-
-    # Repositioning of double mutations
-    if num_new_mutations == 0:
-        return mts
-
-    if double_site_relocation:
-        return tables_double_site_relocation(tables)
-
-    if relocate_double_gene_gain:
-        return tables_relocate_double_gene_gain(tables, num_sites)
 
 
 def tables_double_site_relocation(tables: tskit.TableCollection) -> tskit.TreeSequence:
+
     """
     Splits the genome in half and removes double gene gain mutations on the left and single gene gain on the right half.
 

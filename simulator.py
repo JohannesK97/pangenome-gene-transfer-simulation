@@ -15,28 +15,39 @@ import os
 import torch
 from sbi.utils import BoxUniform
 
-# Given: rho, theta, hgt_rate, core_tree
+# Nur für Laufzeitanalyse:
+import cProfile
+import pstats
+import sys
+import time
 
+# Given: rho, theta, hgt_rate, ce_from_nwk
+
+@profile
 def simulator(
     theta: int = 1,
     rho: float = 0.1,
     hgt_rate: float = 0,
-    core_tree: Union[str, None] = None,
+    ce_from_nwk: Union[str, None] = None,
     num_samples: Union[int, None] = None,
     infinite_sites_factor: int = 3,
 ) -> tskit.TreeSequence:
 
-    if core_tree is not None and num_samples is not None:
+    start_time = time.time()
+    
+    """
+    if ce_from_nwk is not None and num_samples is not None:
         raise ValueError(
             "A core tree and parameters for simulation were provided. Choose either."
         )
+    """
         
-    if core_tree is None and num_samples is None:
+    if ce_from_nwk is None and num_samples is None:
         raise ValueError(
             "Neither a core tree or parameters for simulation were provided. Choose either."
         )
     
-    if core_tree is None:
+    if ce_from_nwk is None:
         core_tree = msprime.sim_ancestry(
                 samples=num_samples,
                 sequence_length=1,
@@ -46,8 +57,8 @@ def simulator(
                 gene_conversion_tract_length=1,  # One gene
             )
     
-    ce_from_nwk = core_tree.first().newick()
-    
+        ce_from_nwk = core_tree.first().newick()
+
     # Calculate the number of genes in the root of the core tree:
     
     expected_number_of_genes_in_core_root = 1
@@ -66,6 +77,7 @@ def simulator(
             recombination_rate=0,
             hgt_rate=hgt_rate,
             num_samples=num_samples,
+            ce_from_nwk=ce_from_nwk,
             num_sites=number_of_genes_in_core_root,
             double_site_relocation=False,
             core_genes=True,
@@ -82,6 +94,7 @@ def simulator(
         recombination_rate=0,
         hgt_rate=hgt_rate,
         num_samples=num_samples,
+        ce_from_nwk=ce_from_nwk,
         num_sites=num_sites,
         double_site_relocation=False,
         core_genes=False,
@@ -94,8 +107,12 @@ def simulator(
     
     # Calculate the number of gene gains:
     number_of_gains = np.random.poisson(lam=tree_lengths_average*theta)
-    
+
+    if number_of_gains > num_sites/2:
+        print("WARNING: infinite_sites_factor too small for big theta. Increase infinite_sites_factor")
+        
     while (number_of_gains > num_sites):
+        print("WARNING: infinite_sites_factor too small for big theta")
         number_of_gains = np.random.poisson(lam=tree_lengths_average*theta)
     
     # Make sure all lengths are positive
@@ -137,9 +154,13 @@ def simulator(
             gene_absence_presence_matrix.append(var.genotypes)
     gene_absence_presence_matrix = np.array(gene_absence_presence_matrix)
 
-    print(gene_absence_presence_matrix)
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
+    #print(f"Success: hgt_rate = {hgt_rate}, Total computation time = {elapsed_time:.6f} seconds.")
 
     return gene_absence_presence_matrix
+    #return mts
 
 
 def read_simulation_results(file_path):
@@ -183,13 +204,12 @@ def read_simulation_results(file_path):
 
     return hgt_rates, results
 
-def simulator_SBI(theta, rho, num_samples, hgt_rate):    
-    return simulator(theta=theta, rho=rho, num_samples=num_samples, hgt_rate=hgt_rate)
+def simulator_SBI(theta, rho, num_samples, hgt_rate, ce_from_nwk):    
+    return simulator(theta=theta, rho=rho, num_samples=num_samples, hgt_rate=hgt_rate, ce_from_nwk=ce_from_nwk)
 
-
-def simulate_and_store(theta, rho, num_samples, hgt_rate, output_file):
+def simulate_and_store(theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file):
     
-    result = simulator_SBI(theta, rho, num_samples, hgt_rate)
+    result = simulator_SBI(theta, rho, num_samples, hgt_rate, ce_from_nwk)
     
     np.set_printoptions(threshold=np.inf, linewidth=np.inf)
     
@@ -197,27 +217,62 @@ def simulate_and_store(theta, rho, num_samples, hgt_rate, output_file):
         f.write(f"hgt_rate {hgt_rate}: {result}\n")
 
 def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples):
+
+    core_tree = msprime.sim_ancestry(
+            samples=num_samples,
+            sequence_length=1,
+            ploidy=1,
+            recombination_rate=0,
+            gene_conversion_rate=0,
+            gene_conversion_tract_length=1,  # One gene
+        )
+
+    ce_from_nwk = core_tree.first().newick()
+    """
     with ProcessPoolExecutor(max_workers=8) as executor:
         futures = []
         for idx in range(num_simulations):
             hgt_rate = hgt_rates[idx].item()
-            # futures.append(executor.submit(simulate_and_store, theta, rho, num_samples, hgt_rate, output_file, idx))
-            futures.append(executor.submit(simulate_and_store, theta, rho, num_samples, hgt_rate, output_file))
+            futures.append(executor.submit(simulate_and_store, theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file))
 
         # Warten auf alle Futures
         for future in futures:
             future.result()  # blockiert bis die Aufgabe abgeschlossen ist
+    """
+    hgt_rate = hgt_rates[0].item()
+    hgt_rate = 0.5
+    simulate_and_store(theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file)
+            
+def profile_function():
+    """Profiling-Funktion, um your_function zu analysieren."""
+    profiler = cProfile.Profile()
+    profiler.enable()
+    run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
+    profiler.disable()
 
+    # Ergebnisse speichern
+    profiler.dump_stats("runtime.prof")
+    print("Profiling abgeschlossen. Ergebnisse in 'runtime.prof' gespeichert.")
+
+    # Ergebnisse anzeigen
+    with open("profile_results.txt", "w") as f:
+        stats = pstats.Stats(profiler, stream=f)
+        stats.sort_stats('cumulative')  # Sortieren nach kumulierter Zeit
+        stats.print_stats()
+
+    
 if __name__ == '__main__':
     
-    num_simulations = 500
+    num_simulations = 1
     
     hgt_rate_max = 0.1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
-    theta = 100
-    rho = 0.1
+    theta = 30
+    rho = 0.3
     num_samples = 20
+
+    runtime_analysis = True
     
     prior = BoxUniform(low=hgt_rate_min * torch.ones(1), high=hgt_rate_max * torch.ones(1))
 
@@ -227,8 +282,14 @@ if __name__ == '__main__':
 
     if os.path.exists(output_file):
         os.remove(output_file)
-    
-    run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
+
+    if runtime_analysis:
+        print("Profiling-Modus aktiviert...")
+        profile_function()
+    else:
+        print("Normaler Ausführungsmodus...")
+        run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
+        
 
 
 

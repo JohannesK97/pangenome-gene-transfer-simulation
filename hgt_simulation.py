@@ -1338,6 +1338,7 @@ class Simulator:
             individual_index -= num_ancestors
         raise AssertionError()
 
+    #@profile
     def hudson_simulate(self, end_time):
         """
         Simulates the algorithm until all loci have coalesced.
@@ -1353,7 +1354,7 @@ class Simulator:
 
         # only worried about label 0 below
         while len(non_empty_pops) > 0:
-            self.verify()
+            #self.verify()
             if self.t >= end_time:
                 break
             # self.print_state()
@@ -2277,6 +2278,7 @@ class Simulator:
         pop.add(alpha_prime)
         return alpha, alpha_prime
 
+    #@profile
     def hgt_branch_event(self, label, left_event):
         population_index = 0
 

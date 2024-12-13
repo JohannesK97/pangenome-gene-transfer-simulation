@@ -11,7 +11,10 @@ import functools
 import dataclasses
 
 from random import randint
+from collections import defaultdict
+from bisect import bisect_left, bisect_right
 
+import time
 
 ########################################################################################
 # This part has been extracted from the [msprime GitHub repository](https://github.com/tskit-dev/msprime/blob/main/tests/test_mutations.py).
@@ -204,7 +207,8 @@ class HGTMutationGenerator:
                 assert sid == site_id
                 site_id += 1
 
-    def place_mutations(self, tables, edges, root_nodes, discrete_genome=False):
+    #@profile
+    def place_mutations(self, tables, edges, root_nodes, leaf_node_ids, discrete_genome=False):
         """
         edges: List of edges including hgt edges
         """
@@ -348,6 +352,7 @@ class HGTMutationGenerator:
                 traversal_match.extend(self.find_bottom_mut(parent_id, tree_parent, is_hgt))
             return traversal_match
 
+    #@profile
     def choose_alleles(self, tree_parent, site, mutation_id_offset):
         if site.new:
             site.ancestral_state = self.model.root_allele(self.rng)
@@ -406,8 +411,10 @@ class HGTMutationGenerator:
 
             self.bottom_mut[mut.node] = mut
 
-    def follow_edge(self, bp, node, edges):
-        child_edges = [e for e in edges if e.parent == node if e.left <= bp[0] and bp[1] <= e.right]
+    def follow_edge(self, bp, node, node_to_children):
+        #child_edges = [e for e in edges if e.parent == node if e.left <= bp[0] and bp[1] <= e.right]
+        #child_edges = [e for e in edges if e.parent == node]
+        child_edges = node_to_children[node]
         for e in child_edges:
             is_hgt = bool(int.from_bytes(e.metadata) & self.bin_hgt_mask)
 
@@ -420,40 +427,80 @@ class HGTMutationGenerator:
             else:
                 self.tree_parent[bp][e.child].add((e.parent, is_hgt))
 
-            self.follow_edge(bp, e.child, edges)
+            self.follow_edge(bp, e.child, node_to_children)
 
-    def apply_mutations(self, tables, edges, root_nodes):
+    @profile
+    def apply_mutations(self, tables, edges, root_nodes, leaf_node_ids, number_of_sites):
+        apply_start_time = time.time()
 
-        # Build tree_parent list for every segment interval
-        bp_left, bp_right = zip(*((e.left, e.right) for e in edges))
+        bp_left, bp_right = zip(*((int(e.left), int(e.right)) for e in edges))
         breakpoints = sorted(list(set(bp_left + bp_right)))
-        self.tree_parent = {}
-        for bp in zip(breakpoints, breakpoints[1:]):
-            self.tree_parent[bp] = [set() for _ in range(tables.nodes.num_rows)]
-
-            ### CHANGE:
-            for root_node in root_nodes:
-                # Index= Child ID, Value: Set of parents.
-                self.follow_edge(bp, root_node, edges)
         
-            root_node = max([e.parent for e in edges if e.left <= bp[0] and bp[1] <= e.right])
-            self.follow_edge(bp, root_node, edges)
+        site_edges = [[] for _ in range(number_of_sites+1)]
+        for e in edges:
+            for site_breakpoint in breakpoints[bisect_left(breakpoints, e.left):(bisect_right(breakpoints, e.right)-1)]:
+                site_edges[site_breakpoint].append(e)
+
+        self.tree_parent = {}
+        for bp in zip(breakpoints, breakpoints[1:]): # Neigboring sites with the same tree are treated together.
+            self.tree_parent[bp] = [set() for _ in range(tables.nodes.num_rows)]
+            node_to_children = defaultdict(list)
+            for edge in site_edges[bp[0]]:
+                node_to_children[edge.parent].append(edge)
+
+            root_node = max([e.parent for e in site_edges[bp[0]]])
+            
+            self.follow_edge(bp, root_node, node_to_children)
 
         for pos, site in self.sites.items():
             assert pos == site.position
             # the responsible
             k = [k for k in self.tree_parent.keys() if k[0] <= pos < k[1]][0]  # CHANGE!!!!!!!!!!!!!!!!!!
             self.choose_alleles(self.tree_parent[k], site, None)
+        
+        """ # OLD
+        # Build tree_parent list for every segment interval
+        bp_left, bp_right = zip(*((e.left, e.right) for e in edges))
+        breakpoints = sorted(list(set(bp_left + bp_right)))
+        #print(breakpoints)
+        self.tree_parent = {}
+        for bp in zip(breakpoints, breakpoints[1:]): # Neigboring sites with the same tree are treated together.
+            self.tree_parent[bp] = [set() for _ in range(tables.nodes.num_rows)]
+            site_edges = [e for e in edges if e.left <= bp[0] and bp[1] <= e.right]
+            node_to_children = defaultdict(list)
+            for edge in site_edges:
+                node_to_children[edge.parent].append(edge)
+            ### CHANGE:
+            # for root_node in root_nodes:
+                # Index= Child ID, Value: Set of parents.
+                
+            #    self.follow_edge(bp, root_node, edges)
+            root_node = max([e.parent for e in edges if e.left <= bp[0] and bp[1] <= e.right])
+            
+            self.follow_edge(bp, root_node, node_to_children)
+
+        for pos, site in self.sites.items():
+            assert pos == site.position
+            # the responsible
+            k = [k for k in self.tree_parent.keys() if k[0] <= pos < k[1]][0]  # CHANGE!!!!!!!!!!!!!!!!!!
+            self.choose_alleles(self.tree_parent[k], site, None)
+        """
+        
+        apply_end_time = time.time()
+        # print("Apply time:", apply_end_time-apply_start_time)
 
     def rectify_hgt_edges(self, tables, edges):
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
         return sorted(edges, key=lambda e: (tables.nodes[e.parent].time, e.child, e.left))
 
+    @profile
     def generate(
         self,
         tables,
         edges,
         root_nodes,
+        leaf_node_ids,
+        number_of_sites,
         seed,
         one_mutation=False,
         keep=False,
@@ -469,8 +516,8 @@ class HGTMutationGenerator:
         if one_mutation:
             self.place_one_mutation(tables, edges, discrete_genome=discrete_genome)
         else:
-            self.place_mutations(tables, edges, root_nodes, discrete_genome=discrete_genome)
-            self.apply_mutations(tables, edges, root_nodes)
+            self.place_mutations(tables, edges, root_nodes, leaf_node_ids, discrete_genome=discrete_genome)
+            self.apply_mutations(tables, edges, root_nodes, leaf_node_ids, number_of_sites)
 
 
         #for pos, site in self.sites.items():
@@ -515,15 +562,19 @@ def sim_mutations(
     edges.extend(hgt_edges)
 
     child_ids = {e.child for e in edges}
-
     root_nodes = list({e.parent for e in edges if e.parent not in child_ids})
- 
+    leaf_node_ids = [i for i, f in enumerate(tables.nodes.flags) if f == 1]
+
+    number_of_sites = int(ts.sequence_length)
+    
     hgt_generator = HGTMutationGenerator(rate_map=rate_map, model=gain_loss_model)
 
     ts = hgt_generator.generate(
         tables,
         edges,
         root_nodes,
+        leaf_node_ids,
+        number_of_sites,
         randint(0, 4294967295),
         one_mutation,
         keep=True,
