@@ -23,7 +23,7 @@ import time
 
 # Given: rho, theta, hgt_rate, ce_from_nwk
 
-@profile
+#@profile
 def simulator(
     theta: int = 1,
     rho: float = 0.1,
@@ -159,8 +159,8 @@ def simulator(
     
     #print(f"Success: hgt_rate = {hgt_rate}, Total computation time = {elapsed_time:.6f} seconds.")
 
-    return gene_absence_presence_matrix
-    #return mts
+    #return gene_absence_presence_matrix
+    return mts
 
 
 def read_simulation_results(file_path):
@@ -240,7 +240,7 @@ def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samp
             future.result()  # blockiert bis die Aufgabe abgeschlossen ist
     """
     hgt_rate = hgt_rates[0].item()
-    hgt_rate = 0.5
+    hgt_rate = 0.1
     simulate_and_store(theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file)
             
 def profile_function():
@@ -268,7 +268,7 @@ if __name__ == '__main__':
     hgt_rate_max = 0.1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
-    theta = 30
+    theta = 600
     rho = 0.3
     num_samples = 20
 

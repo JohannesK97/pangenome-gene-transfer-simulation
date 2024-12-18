@@ -18,7 +18,7 @@ from gfs import gfs_from_matrix
 
 alleles = ["absent", "present"]
 
-@profile
+#@profile
 def gene_model(
     theta: int,
     rho: float,
@@ -222,6 +222,7 @@ def gene_model(
         mts = hgt_mutations.sim_mutations(
             ts,
             hgt_edges=hgt_edges,
+            rho=rho,
             event_rate=event_rate,
             model=gain_loss_model,
             one_mutation=True
@@ -232,6 +233,7 @@ def gene_model(
         mts = hgt_mutations.sim_mutations(
             mts,
             hgt_edges=hgt_edges,
+            rho=rho,
             event_rate=event_rate,
             model=gain_loss_model,
             one_mutation=False
@@ -240,6 +242,7 @@ def gene_model(
         mts = hgt_mutations.sim_mutations(
             ts,
             hgt_edges=hgt_edges,
+            rho=rho,
             event_rate=event_rate,
             model=gain_loss_model,
             one_mutation=False
