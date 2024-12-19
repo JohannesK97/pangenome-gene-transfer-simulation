@@ -12,6 +12,7 @@ import dataclasses
 
 from random import randint
 from collections import defaultdict
+from collections import deque
 from bisect import bisect_left, bisect_right
 
 import time
@@ -335,7 +336,49 @@ class HGTMutationGenerator:
             )
             self.mutation_edge[int(site.position)][edge_with_mutation.child].append(mutation)
 
+    @profile
+    def find_ancestor_mutations(self, site, leaf_mut_node):
+        # Bestimme den linken Breakpoint des Site.
+        k = bisect_right(self.breakpoints, int(site.position)) - 1
+        bp = self.breakpoints[k]
+        
+        # Initialisiere Ergebnisse und eine Queue für die Traversierung.
+        parent_mutations = []
+        nodes_to_process = deque([leaf_mut_node])
+        
+        visited = set()  # Verhindert doppelte Verarbeitung von Knoten.
+    
+        while nodes_to_process:
+            child_node = nodes_to_process.popleft()
+            
+            # Verarbeite den Knoten nur, wenn er noch nicht besucht wurde.
+            if child_node in visited:
+                continue
+            visited.add(child_node)
+            
+            # Wenn auf der Kante eine Mutation existiert, finde die früheste.
+            if self.mutation_edge[int(site.position)][child_node]:
+                earliest_mutation = min(
+                    self.mutation_edge[int(site.position)][child_node], 
+                    key=lambda m: m.time
+                )
+                parent_mutations.append(earliest_mutation)
+                
+                # Prüfe auf HGT-Ereignis und füge Elternknoten hinzu.
+                if len(self.node_to_parent[bp][child_node]) > 1:
+                    hgt_parents = [
+                        e.parent for e in self.node_to_parent[bp][child_node]
+                    ]
+                    nodes_to_process.extend(hgt_parents)
+    
+            # Wenn keine Mutation existiert, füge Elternknoten hinzu.
+            else:
+                parent_nodes = [e.parent for e in self.node_to_parent[bp][child_node]]
+                nodes_to_process.extend(parent_nodes)
+        
+        return parent_mutations
 
+    """
     def find_ancestor_mutations(self, site, leaf_mut_node):
 
         #print(self.mutation_edge[int(site.position)])
@@ -349,7 +392,7 @@ class HGTMutationGenerator:
         nodes_without_mutation.add(leaf_mut_node)
         
         while nodes_without_mutation:
-            print(int(site.position), nodes_without_mutation)
+            #print(int(site.position), nodes_without_mutation)
             for child_node in set(nodes_without_mutation):
                 
                 # There is at least a mutation on the edge.
@@ -361,16 +404,16 @@ class HGTMutationGenerator:
 
                 # There is no mutation on the edge.
                 else:
-                    for parent in [e.parent for e in self.node_to_parent[bp][child_node]]:
-                        nodes_without_mutation.add(parent)
+                    for e in self.node_to_parent[bp][child_node]:
+                        nodes_without_mutation.add(e.parent)
 
                 nodes_without_mutation.remove(child_node)
                 
                 
         return parent_mutations
-            
+    """     
 
-    #@profile
+    @profile
     def choose_alleles(self):
         
         for pos, site in self.sites.items():
@@ -392,7 +435,7 @@ class HGTMutationGenerator:
                     #    mutation seen on the edge above u so far, if any
                     
                     parent_muts = self.find_ancestor_mutations(site, leaf_mut.node)
-                    print("pos:", pos, "leaf_mut.node", leaf_mut.node, parent_muts)
+                    #print("pos:", pos, "leaf_mut.node", leaf_mut.node, parent_muts)
     
                     parent_muts = sorted(parent_muts, key=lambda m: m.time)
                     present_parent = [p for p in parent_muts if p.derived_state == "present"]
@@ -408,7 +451,7 @@ class HGTMutationGenerator:
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
         return sorted(edges, key=lambda e: (tables.nodes[e.parent].time, e.child, e.left))
 
-    #@profile
+    @profile
     def generate(
         self,
         tables,

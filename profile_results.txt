@@ -1,721 +1,723 @@
-         36611466 function calls (29663939 primitive calls) in 95.447 seconds
+         326596014 function calls (326313655 primitive calls) in 753.318 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.001    0.001   96.071   96.071 simulator.py:219(run_simulation)
-        1    0.000    0.000   96.061   96.061 simulator.py:210(simulate_and_store)
-        1    0.001    0.001   95.797   95.797 simulator.py:207(simulator_SBI)
-        1    0.990    0.990   95.796   95.796 simulator.py:27(simulator)
-     10/2    0.003    0.000   94.471   47.236 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\line_profiler\line_profiler.py:146(wrapper)
-        2    0.281    0.140   94.470   47.235 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\gene_model.py:21(gene_model)
-        3    0.096    0.032   58.864   19.621 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:644(sim_mutations)
-        3   14.003    4.668   56.996   18.999 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:550(generate)
-        2    0.000    0.000   35.313   17.657 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3375(run_simulate)
-        2    0.029    0.014   33.319   16.660 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:488(apply_mutations)
-        2    0.000    0.000   32.244   16.122 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1242(simulate)
-        2    0.325    0.162   32.234   16.117 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1342(hudson_simulate)
-     4020    1.529    0.000   25.439    0.006 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2282(hgt_branch_event)
-     1406    0.269    0.000   23.271    0.017 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:412(choose_alleles)
-5562094/35223   21.623    0.000   22.621    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:394(find_bottom_mut)
-  1284582    2.002    0.000   13.614    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:310(__getitem__)
-  1294888   11.491    0.000   11.491    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:620(get_value)
-1373169/1169    7.477    0.000   10.016    0.009 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:470(follow_edge)
-   639349    0.678    0.000    9.479    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:431(succ_key)
-   639349    8.801    0.000    8.801    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:693(succ_item)
-     2321    0.034    0.000    5.760    0.002 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2735(common_ancestor_event)
-     1531    0.407    0.000    5.518    0.004 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2810(merge_two_ancestors)
-        2    3.244    1.622    4.307    2.154 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:210(place_mutations)
-   155347    0.501    0.000    3.361    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:495(__getitem__)
-        2    1.089    0.545    3.049    1.525 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:825(__init__)
-      202    0.175    0.001    2.819    0.014 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2663(defrag_breakpoints)
-  1454094    2.429    0.000    2.469    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:768(__get__)
-        3    0.023    0.008    2.046    0.682 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:546(rectify_hgt_edges)
-     2986    0.431    0.000    1.874    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1786(store_arg_edges)
-   155336    0.351    0.000    1.838    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:713(_make_row)
-    11483    0.067    0.000    1.770    0.000 {built-in method builtins.sorted}
-    75885    0.128    0.000    1.696    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:548(<lambda>)
-   198442    0.656    0.000    1.502    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1187(store_edge)
-  6821944    1.497    0.000    1.497    0.000 {method 'append' of 'list' objects}
-   183762    0.418    0.000    1.386    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:793(new_init)
-   200002    1.271    0.000    1.271    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:122(__init__)
-    39733    0.186    0.000    1.231    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1848(set_segment_mass)
-   115958    0.376    0.000    1.112    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1351(add_row)
-     4681    0.017    0.000    1.033    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1156(store_node)
-     6176    0.365    0.000    1.018    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1162(flush_edges)
-  5526884    0.998    0.000    0.998    0.000 {method 'extend' of 'list' objects}
-  1643789    0.372    0.000    0.864    0.000 {built-in method builtins.isinstance}
-   199935    0.537    0.000    0.724    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:294(__init__)
-     5707    0.495    0.000    0.677    0.000 {method 'choice' of 'numpy.random.mtrand.RandomState' objects}
-    12727    0.026    0.000    0.647    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:317(__setitem__)
-   159471    0.382    0.000    0.623    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:692(validate_and_encode_row)
-    12727    0.381    0.000    0.619    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:123(insert)
-   383697    0.593    0.000    0.593    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:778(__set__)
-    39813    0.086    0.000    0.592    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:589(mass_between)
-        3    0.175    0.058    0.562    0.187 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:181(populate_tables)
-    83632    0.283    0.000    0.536    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:594(position_to_mass)
-   183848    0.126    0.000    0.492    0.000 <frozen abc>:117(__instancecheck__)
-     6004    0.176    0.000    0.488    0.000 {method 'sort' of 'list' objects}
-   778556    0.186    0.000    0.468    0.000 {built-in method builtins.len}
-   435493    0.412    0.000    0.415    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:730(metadata_schema)
-    46614    0.090    0.000    0.414    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:71(set_value)
-     8224    0.389    0.000    0.389    0.000 {built-in method numpy.array}
-   183848    0.147    0.000    0.365    0.000 {built-in method _abc._abc_instancecheck}
-   200000    0.360    0.000    0.360    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:699(__init__)
-    36303    0.148    0.000    0.344    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1999(add_row)
-     4006    0.040    0.000    0.318    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1886(choose_breakpoint)
-    46614    0.291    0.000    0.291    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:59(increment)
-    75888    0.114    0.000    0.283    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:547(<genexpr>)
-   155561    0.168    0.000    0.282    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:473(__len__)
-    85838    0.255    0.000    0.266    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:620(_search)
-        1    0.000    0.000    0.262    0.262 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:1595(_array_str_implementation)
-        1    0.000    0.000    0.262    0.262 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:561(array2string)
-        1    0.000    0.000    0.262    0.262 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:506(wrapper)
-        1    0.000    0.000    0.262    0.262 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:523(_array2string)
-     1493    0.029    0.000    0.254    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2189(create_hgt_segment)
-     1080    0.001    0.000    0.240    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:135(site)
-     1080    0.013    0.000    0.238    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6149(site)
-    36303    0.150    0.000    0.234    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:60(add_mutation)
-        4    0.229    0.057    0.229    0.057 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:42(__init__)
-65825/46788    0.079    0.000    0.228    0.000 {built-in method builtins.sum}
-183867/183781    0.130    0.000    0.219    0.000 <frozen abc>:121(__subclasscheck__)
-    27306    0.074    0.000    0.217    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6119(mutation)
-    55364    0.081    0.000    0.214    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:222(get_num_ancestors)
-        1    0.000    0.000    0.187    0.187 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:780(_formatArray)
-  29212/1    0.057    0.000    0.187    0.187 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:789(recurser)
-  1489057    0.182    0.000    0.182    0.000 {built-in method from_bytes}
-     4566    0.108    0.000    0.179    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2696(is_blocked_ancestor)
-        1    0.024    0.024    0.175    0.175 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:317(place_one_mutation)
-   111767    0.171    0.000    0.171    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:81(cmp_mutation)
-   159470    0.139    0.000    0.158    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:610(validate_bytes)
-   239925    0.156    0.000    0.156    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:51(__getitem__)
-    18361    0.145    0.000    0.145    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:78(get_cumulative_sum)
-     2415    0.006    0.000    0.145    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:323(__delitem__)
-     2415    0.094    0.000    0.138    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:184(remove)
-    14355    0.018    0.000    0.128    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:53(get_total)
-    10306    0.020    0.000    0.123    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:238(__contains__)
-   198442    0.123    0.000    0.123    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1167(<lambda>)
-        3    0.014    0.005    0.119    0.040 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:158(initialise_sites)
-      154    0.024    0.000    0.118    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2650(defrag_segment_chain)
-        2    0.000    0.000    0.114    0.057 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:175(__init__)
-   155561    0.114    0.000    0.114    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:360(num_rows)
-     4006    0.110    0.000    0.110    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:96(find)
-     6341    0.010    0.000    0.104    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1293(get_total_gc_left_rate)
-    39813    0.044    0.000    0.101    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1844(get_hgt_left_bound)
-     5707    0.017    0.000    0.101    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2979(prod)
-     6341    0.029    0.000    0.097    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:259(_get_common_ancestor_waiting_time_hudson)
-     6341    0.025    0.000    0.094    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1297(get_total_gc_left)
-     6341    0.009    0.000    0.094    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1320(get_total_hgt_left_rate)
-    78531    0.093    0.000    0.093    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:567(<genexpr>)
-183867/183781    0.089    0.000    0.089    0.000 {built-in method _abc._abc_subclasscheck}
-     6355    0.021    0.000    0.085    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1324(get_total_hgt_left)
-     5730    0.049    0.000    0.084    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:71(_wrapreduction)
-     6881    0.021    0.000    0.084    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1133(free_segment)
-   159470    0.083    0.000    0.083    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:184(encode)
-    93480    0.075    0.000    0.082    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:224(<genexpr>)
-    20556    0.028    0.000    0.081    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1955(log)
-    14215    0.029    0.000    0.081    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1914(debug)
-   311108    0.079    0.000    0.079    0.000 {method 'add' of 'set' objects}
-    20055    0.060    0.000    0.078    0.000 {built-in method builtins.max}
-     6341    0.017    0.000    0.077    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1314(get_total_hgt_rate)
-    31577    0.055    0.000    0.075    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:197(__get__)
-        1    0.000    0.000    0.075    0.075 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:452(_get_format_function)
-        1    0.000    0.000    0.075    0.075 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:411(<lambda>)
-        1    0.000    0.000    0.075    0.075 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:907(__init__)
-        1    0.007    0.007    0.075    0.075 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:934(fillFormat)
-   115958    0.071    0.000    0.071    0.000 {method 'add_row' of '_tskit.EdgeTable' objects}
-   115964    0.070    0.000    0.070    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2909(edges)
-     4617    0.016    0.000    0.069    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:119(transition_allele)
-    28426    0.010    0.000    0.065    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6057(check_index)
-     1080    0.001    0.000    0.064    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5023(at)
-    27820    0.019    0.000    0.064    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:753(_extendLine_pretty)
-    27820    0.047    0.000    0.060    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:1018(__call__)
-    13918    0.058    0.000    0.058    0.000 {method 'reduce' of 'numpy.ufunc' objects}
-    39813    0.056    0.000    0.056    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1829(get_recomb_left_bound)
-     4721    0.018    0.000    0.055    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1157(add_row)
-    20556    0.025    0.000    0.053    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1964(isEnabledFor)
-     8188    0.010    0.000    0.052    0.000 {method 'sum' of 'numpy.ndarray' objects}
-     5705    0.022    0.000    0.051    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numerictypes.py:357(issubdtype)
-     4617    0.042    0.000    0.051    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:108(choose_allele)
-    19018    0.032    0.000    0.050    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:599(expovariate)
-    78528    0.049    0.000    0.049    0.000 {built-in method _bisect.bisect_left}
-    80828    0.049    0.000    0.049    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2898(nodes)
-    84909    0.048    0.000    0.048    0.000 {built-in method _bisect.bisect_right}
-     1080    0.001    0.000    0.048    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:850(seek)
-     6341    0.019    0.000    0.047    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1920(info)
-    12682    0.014    0.000    0.047    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1506(<genexpr>)
-     1080    0.045    0.000    0.045    0.000 {method 'seek' of '_tskit.Tree' objects}
-    11478    0.013    0.000    0.044    0.000 {built-in method builtins.any}
-     6341    0.021    0.000    0.042    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:242(_get_common_ancestor_waiting_time)
-     8188    0.009    0.000    0.042    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_methods.py:47(_sum)
-    27821    0.014    0.000    0.042    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:989(<genexpr>)
-    37476    0.035    0.000    0.041    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2727(<genexpr>)
-    12710    0.021    0.000    0.041    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:585(mean_rate)
-    79451    0.040    0.000    0.040    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:187(decode)
-    12682    0.012    0.000    0.040    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1299(<genexpr>)
-     2415    0.004    0.000    0.039    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:437(floor_key)
-    12710    0.012    0.000    0.038    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1326(<genexpr>)
-    75885    0.038    0.000    0.038    0.000 {method 'get_row' of '_tskit.EdgeTable' objects}
-     2415    0.035    0.000    0.035    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:764(floor_item)
-    27820    0.023    0.000    0.035    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:739(_extendLine)
-     4084    0.017    0.000    0.035    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1121(copy_segment)
-     2547    0.019    0.000    0.035    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:74(jsw_single)
-    46654    0.033    0.000    0.033    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:90(get_value)
-    75885    0.033    0.000    0.033    0.000 {method 'get_row' of '_tskit.NodeTable' objects}
-     6881    0.027    0.000    0.029    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1094(alloc_segment)
-    47527    0.029    0.000    0.029    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:70(height)
-    20563    0.028    0.000    0.028    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1790(isEnabledFor)
-    11410    0.023    0.000    0.028    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numerictypes.py:283(issubclass_)
-     4006    0.014    0.000    0.027    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:606(mass_to_position)
-    11410    0.023    0.000    0.026    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\getlimits.py:484(__new__)
-       10    0.000    0.000    0.025    0.003 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3341(tree_sequence)
-     1147    0.001    0.000    0.025    0.000 {built-in method builtins.next}
-    55640    0.023    0.000    0.023    0.000 {built-in method numpy.core._multiarray_umath.dragon4_positional}
-   106901    0.023    0.000    0.023    0.000 {method 'issubset' of 'set' objects}
-    36303    0.023    0.000    0.023    0.000 {method 'add_row' of '_tskit.MutationTable' objects}
-    87347    0.023    0.000    0.023    0.000 {method 'append' of 'array.array' objects}
-    27306    0.013    0.000    0.022    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:466(__init__)
-    36309    0.022    0.000    0.022    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2942(mutations)
-      672    0.002    0.000    0.021    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:87(jsw_double)
-    31577    0.021    0.000    0.021    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1279(value)
-    27821    0.011    0.000    0.020    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:984(<genexpr>)
-     2486    0.006    0.000    0.020    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1779(add_row)
-     2283    0.017    0.000    0.019    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:454(choices)
-    35223    0.019    0.000    0.019    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:419(<lambda>)
-        4    0.000    0.000    0.017    0.004 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:4055(build_index)
-        4    0.017    0.004    0.017    0.004 {method 'build_index' of '_tskit.TableCollection' objects}
-    41102    0.015    0.000    0.015    0.000 {method 'to_bytes' of 'int' objects}
-     1083    0.009    0.000    0.015    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:665(__init__)
-    10314    0.015    0.000    0.015    0.000 {method 'flat' of '_msprime.RandomGenerator' objects}
-    27306    0.008    0.000    0.015    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4600(num_mutations)
-    27306    0.014    0.000    0.014    0.000 {method 'get_mutation' of '_tskit.TreeSequence' objects}
-     2486    0.010    0.000    0.014    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:146(add_site)
-        2    0.000    0.000    0.014    0.007 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2947(parse_nwk)
-     38/2    0.001    0.000    0.013    0.007 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3013(parse_nwk_str)
-       38    0.011    0.000    0.012    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2989(bracket_split)
-     1408    0.001    0.000    0.012    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5362(variants)
-    19018    0.012    0.000    0.012    0.000 {built-in method math.log}
-    12459    0.011    0.000    0.011    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:55(__setitem__)
-    12720    0.011    0.000    0.011    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:581(total_mass)
-     2423    0.006    0.000    0.010    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:118(_new_node)
-        2    0.001    0.001    0.010    0.005 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:179(pack_strings)
+        1    0.001    0.001  762.335  762.335 simulator.py:219(run_simulation)
+        1    0.000    0.000  762.325  762.325 simulator.py:210(simulate_and_store)
+        1    0.003    0.003  762.029  762.029 simulator.py:207(simulator_SBI)
+        1    1.725    1.725  762.026  762.026 simulator.py:27(simulator)
+  39307/2    1.358    0.000  758.459  379.229 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\line_profiler\line_profiler.py:146(wrapper)
+        2    3.345    1.672  758.452  379.226 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\gene_model.py:21(gene_model)
+        3    1.168    0.389  635.088  211.696 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:531(sim_mutations)
+        3  158.867   52.956  608.302  202.767 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:454(generate)
+        2    0.467    0.234  376.552  188.276 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:416(choose_alleles)
+    39300  341.503    0.009  374.183    0.010 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:339(find_ancestor_mutations)
+        2    0.000    0.000  119.971   59.985 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3378(run_simulate)
+        2    0.000    0.000  117.003   58.501 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1242(simulate)
+        2    3.788    1.894  116.903   58.451 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1342(hudson_simulate)
+    13522    0.160    0.000   58.417    0.004 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2738(common_ancestor_event)
+    11826    3.041    0.000   57.231    0.005 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2813(merge_two_ancestors)
+  2534978    7.875    0.000   50.484    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:495(__getitem__)
+    56029    0.538    0.000   48.078    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2283(hgt_branch_event)
+     1336    2.188    0.002   37.994    0.028 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2666(defrag_breakpoints)
+        3    0.396    0.132   34.853   11.618 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:450(rectify_hgt_edges)
+   108873    0.962    0.000   28.546    0.000 {built-in method builtins.sorted}
+  1265018    1.980    0.000   27.547    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:452(<lambda>)
+  2534967    5.578    0.000   26.475    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:713(_make_row)
+    23576    5.866    0.000   26.153    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1787(store_arg_edges)
+  1964148    2.893    0.000   21.871    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:310(__getitem__)
+  3014758    9.064    0.000   20.551    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1187(store_edge)
+  2023494   19.250    0.000   19.250    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:620(get_value)
+  2574306    6.092    0.000   18.537    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:793(new_init)
+  1927510    5.954    0.000   17.493    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1351(add_row)
+ 73442270   15.605    0.000   15.605    0.000 {method 'append' of 'list' objects}
+    36700    0.116    0.000   14.819    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1156(store_node)
+   961692    0.972    0.000   14.742    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:431(succ_key)
+    48490    5.075    0.000   14.547    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1162(flush_edges)
+   961692   13.770    0.000   13.770    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:693(succ_item)
+ 48602346   12.763    0.000   12.763    0.000 {method 'extend' of 'collections.deque' objects}
+ 48659804   11.090    0.000   11.090    0.000 {method 'add' of 'set' objects}
+   360037    1.567    0.000   10.834    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1849(set_segment_mass)
+  3026546    7.639    0.000   10.385    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:294(__init__)
+  6623567    2.406    0.000    9.452    0.000 {built-in method builtins.isinstance}
+ 48691239    8.608    0.000    8.608    0.000 {method 'popleft' of 'collections.deque' objects}
+  2019060    4.616    0.000    7.521    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:692(validate_and_encode_row)
+  2574392    1.786    0.000    7.046    0.000 <frozen abc>:117(__instancecheck__)
+  7430101    2.268    0.000    6.761    0.000 {built-in method builtins.len}
+  5600852    6.282    0.000    6.282    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:778(__set__)
+  1265021    1.822    0.000    6.195    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:451(<genexpr>)
+  6518284    5.901    0.000    5.904    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:730(metadata_schema)
+  2574392    2.131    0.000    5.260    0.000 {built-in method _abc._abc_instancecheck}
+   360117    0.731    0.000    5.137    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:589(mass_between)
+   776135    2.512    0.000    4.784    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:594(position_to_mass)
+  2536326    2.640    0.000    4.493    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:473(__len__)
+  1290490    3.608    0.000    4.237    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:768(__get__)
+    55901    0.458    0.000    4.196    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1887(choose_breakpoint)
+        2    2.367    1.184    3.850    1.925 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:217(place_mutations)
+   409310    0.720    0.000    3.744    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:71(set_value)
+    28846    1.341    0.000    3.285    0.000 {method 'sort' of 'list' objects}
+2574411/2574325    1.895    0.000    3.129    0.000 <frozen abc>:121(__subclasscheck__)
+    52682    0.099    0.000    2.891    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:317(__setitem__)
+    52682    1.708    0.000    2.783    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:123(insert)
+   409310    2.756    0.000    2.756    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:59(increment)
+    12098    2.637    0.000    2.637    0.000 {built-in method numpy.array}
+        2    1.017    0.509    2.604    1.302 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:825(__init__)
+   823833    2.341    0.000    2.440    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:620(_search)
+709444/500663    0.723    0.000    2.156    0.000 {built-in method builtins.sum}
+   583674    0.781    0.000    2.050    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:222(get_num_ancestors)
+  2019059    1.672    0.000    1.895    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:610(validate_bytes)
+  2536326    1.853    0.000    1.853    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:360(num_rows)
+    11788    0.185    0.000    1.794    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2190(create_hgt_segment)
+   237256    1.748    0.000    1.748    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:78(get_cumulative_sum)
+  3014758    1.680    0.000    1.680    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1167(<lambda>)
+    55901    1.547    0.000    1.547    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:96(find)
+  1285562    1.487    0.000    1.487    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:468(<genexpr>)
+   181355    0.194    0.000    1.436    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:53(get_total)
+     1483    0.003    0.000    1.353    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5023(at)
+     1077    0.250    0.000    1.302    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2653(defrag_segment_chain)
+     1483    0.002    0.000    1.240    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:850(seek)
+     1483    1.237    0.001    1.237    0.001 {method 'seek' of '_tskit.Tree' objects}
+2574411/2574325    1.234    0.000    1.234    0.000 {built-in method _abc._abc_subclasscheck}
+        1    0.131    0.131    1.128    1.128 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:298(place_one_mutation)
+  1927516    1.107    0.000    1.107    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2909(edges)
+     8619    0.814    0.000    1.064    0.000 {method 'choice' of 'numpy.random.mtrand.RandomState' objects}
+  1927510    1.016    0.000    1.016    0.000 {method 'add_row' of '_tskit.EdgeTable' objects}
+  2019059    1.010    0.000    1.010    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:184(encode)
+    69551    0.096    0.000    0.947    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1293(get_total_gc_left_rate)
+    69551    0.091    0.000    0.945    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1320(get_total_hgt_left_rate)
+    26968    0.495    0.000    0.884    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2699(is_blocked_ancestor)
+    69679    0.200    0.000    0.856    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1324(get_total_hgt_left)
+    69551    0.201    0.000    0.850    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1297(get_total_gc_left)
+   360117    0.378    0.000    0.833    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1845(get_hgt_left_bound)
+    69551    0.250    0.000    0.831    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:259(_get_common_ancestor_waiting_time_hudson)
+   200002    0.808    0.000    0.808    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:122(__init__)
+  1285559    0.801    0.000    0.801    0.000 {built-in method _bisect.bisect_left}
+   150930    0.261    0.000    0.784    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1914(debug)
+   220481    0.268    0.000    0.772    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1955(log)
+  1001278    0.698    0.000    0.771    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:224(<genexpr>)
+  1303111    0.768    0.000    0.768    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2898(nodes)
+        3    0.218    0.073    0.745    0.248 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:187(populate_tables)
+    12539    0.025    0.000    0.721    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:323(__delitem__)
+  1201472    0.714    0.000    0.714    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:51(__getitem__)
+    59346    0.103    0.000    0.710    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:238(__contains__)
+    69551    0.136    0.000    0.702    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1314(get_total_hgt_rate)
+  1333723    0.699    0.000    0.699    0.000 {built-in method _bisect.bisect_right}
+    12539    0.472    0.000    0.694    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:184(remove)
+    89611    0.653    0.000    0.672    0.000 {built-in method builtins.max}
+   290233    0.462    0.000    0.631    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:197(__get__)
+  1269949    0.629    0.000    0.629    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:187(decode)
+  1265018    0.612    0.000    0.612    0.000 {method 'get_row' of '_tskit.EdgeTable' objects}
+    49273    0.143    0.000    0.600    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1133(free_segment)
+  1265018    0.561    0.000    0.561    0.000 {method 'get_row' of '_tskit.NodeTable' objects}
+   220481    0.237    0.000    0.504    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1964(isEnabledFor)
+    51359    0.202    0.000    0.470    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1999(add_row)
+   200000    0.467    0.000    0.467    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:699(__init__)
+   360117    0.455    0.000    0.455    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1830(get_recomb_left_bound)
+       10    0.000    0.000    0.454    0.045 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3341(tree_sequence)
+   139102    0.128    0.000    0.417    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1506(<genexpr>)
+   139358    0.128    0.000    0.396    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1326(<genexpr>)
+   139102    0.122    0.000    0.383    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1299(<genexpr>)
+   208647    0.263    0.000    0.382    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:599(expovariate)
+    69551    0.132    0.000    0.381    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1920(info)
+   139358    0.200    0.000    0.377    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:585(mean_rate)
+    36740    0.123    0.000    0.363    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1157(add_row)
+    55901    0.177    0.000    0.345    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:606(mass_to_position)
+        4    0.000    0.000    0.329    0.082 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:4055(build_index)
+        4    0.329    0.082    0.329    0.082 {method 'build_index' of '_tskit.TableCollection' objects}
+     1483    0.002    0.000    0.325    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:135(site)
+    69551    0.178    0.000    0.324    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:242(_get_common_ancestor_waiting_time)
+     1483    0.017    0.000    0.322    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6149(site)
+   184238    0.230    0.000    0.309    0.000 {built-in method builtins.min}
+    51359    0.195    0.000    0.309    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:61(add_mutation)
+    37816    0.100    0.000    0.295    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6119(mutation)
+        1    0.000    0.000    0.294    0.294 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:1595(_array_str_implementation)
+        1    0.000    0.000    0.294    0.294 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:561(array2string)
+        1    0.000    0.000    0.294    0.294 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:506(wrapper)
+        1    0.000    0.000    0.294    0.294 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:523(_array2string)
+   409350    0.268    0.000    0.268    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:90(get_value)
+   220488    0.268    0.000    0.268    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1790(isEnabledFor)
+    65700    0.074    0.000    0.265    0.000 {built-in method builtins.any}
+   244370    0.206    0.000    0.243    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2730(<genexpr>)
+    32197    0.113    0.000    0.238    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1121(copy_segment)
+   161526    0.238    0.000    0.238    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:82(cmp_mutation)
+        4    0.216    0.054    0.216    0.054 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:42(__init__)
+        1    0.000    0.000    0.211    0.211 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:780(_formatArray)
+  33874/1    0.066    0.000    0.211    0.211 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:789(recurser)
+    12539    0.015    0.000    0.199    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:437(floor_key)
+    49273    0.178    0.000    0.190    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1094(alloc_segment)
+    12539    0.183    0.000    0.183    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:764(floor_item)
+   290233    0.169    0.000    0.169    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1279(value)
+        3    0.023    0.008    0.165    0.055 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:159(initialise_sites)
+    12313    0.085    0.000    0.156    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:74(jsw_single)
+  1285559    0.154    0.000    0.154    0.000 {built-in method from_bytes}
+   241619    0.139    0.000    0.139    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:70(height)
+     8619    0.022    0.000    0.137    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2979(prod)
+       10    0.000    0.000    0.125    0.012 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4223(load_tables)
+       10    0.124    0.012    0.124    0.012 {method 'load_tables' of '_tskit.TreeSequence' objects}
+     8642    0.067    0.000    0.115    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:71(_wrapreduction)
+   560282    0.110    0.000    0.110    0.000 {method 'issubset' of 'set' objects}
+     1486    0.067    0.000    0.110    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:665(__init__)
+        2    0.000    0.000    0.110    0.055 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:175(__init__)
+     3606    0.012    0.000    0.107    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:87(jsw_double)
+   425717    0.101    0.000    0.101    0.000 {method 'append' of 'array.array' objects}
+        2    0.000    0.000    0.097    0.048 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1198(finalise)
+        2    0.000    0.000    0.096    0.048 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3576(sort)
+        2    0.096    0.048    0.096    0.048 {method 'sort' of '_tskit.TableCollection' objects}
+   139368    0.094    0.000    0.094    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:581(total_mass)
+     1967    0.002    0.000    0.093    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5362(variants)
+    13484    0.078    0.000    0.091    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:454(choices)
+    39339    0.013    0.000    0.088    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6057(check_index)
+     1965    0.001    0.000    0.086    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:227(decode)
+     1965    0.085    0.000    0.085    0.000 {method 'decode' of '_tskit.Variant' objects}
+    69551    0.085    0.000    0.085    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1281(get_total_recombination_rate)
+   139358    0.084    0.000    0.084    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:577(sequence_length)
+        1    0.000    0.000    0.083    0.083 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:452(_get_format_function)
+        1    0.000    0.000    0.083    0.083 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:411(<lambda>)
+        1    0.000    0.000    0.083    0.083 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:907(__init__)
+        1    0.008    0.008    0.083    0.083 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:934(fillFormat)
+    20706    0.082    0.000    0.082    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+    56029    0.066    0.000    0.079    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:494(uniform)
+    69551    0.079    0.000    0.079    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1287(get_total_gc_rate)
+    12064    0.014    0.000    0.075    0.000 {method 'sum' of 'numpy.ndarray' objects}
+    32260    0.022    0.000    0.072    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:753(_extendLine_pretty)
+     8617    0.033    0.000    0.072    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numerictypes.py:357(issubdtype)
+   291644    0.069    0.000    0.069    0.000 {method 'random' of '_random.Random' objects}
+   208647    0.068    0.000    0.068    0.000 {built-in method math.log}
+    32260    0.052    0.000    0.068    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:1018(__call__)
+     1483    0.001    0.000    0.062    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:985(total_branch_length)
+     1483    0.061    0.000    0.061    0.000 {method 'get_total_branch_length' of '_tskit.Tree' objects}
+    12064    0.012    0.000    0.060    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_methods.py:47(_sum)
+    62002    0.052    0.000    0.052    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:55(__setitem__)
+    57646    0.049    0.000    0.049    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:363(<lambda>)
+    12547    0.025    0.000    0.048    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:118(_new_node)
+    32261    0.016    0.000    0.047    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:989(<genexpr>)
+   111540    0.042    0.000    0.042    0.000 {method 'to_bytes' of 'int' objects}
+     1486    0.040    0.000    0.040    0.000 {method 'set_root_threshold' of '_tskit.Tree' objects}
+    32260    0.026    0.000    0.039    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:739(_extendLine)
+    17234    0.032    0.000    0.038    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numerictypes.py:283(issubclass_)
+    57537    0.037    0.000    0.037    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:440(<lambda>)
+    23664    0.032    0.000    0.037    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:400(add)
+    17234    0.031    0.000    0.036    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\getlimits.py:484(__new__)
+     1550    0.001    0.000    0.032    0.000 {built-in method builtins.next}
+    51359    0.031    0.000    0.031    0.000 {method 'add_row' of '_tskit.MutationTable' objects}
+    37816    0.017    0.000    0.031    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:466(__init__)
+    23652    0.023    0.000    0.030    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:352(remove)
+    51365    0.029    0.000    0.029    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2942(mutations)
+    64520    0.026    0.000    0.026    0.000 {built-in method numpy.core._multiarray_umath.dragon4_positional}
+     3448    0.008    0.000    0.026    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1779(add_row)
+    49876    0.026    0.000    0.026    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:426(<lambda>)
+    36740    0.024    0.000    0.024    0.000 {method 'add_row' of '_tskit.NodeTable' objects}
+    32261    0.012    0.000    0.023    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:984(<genexpr>)
+    12547    0.023    0.000    0.023    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:44(__init__)
+    37058    0.023    0.000    0.023    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:446(<lambda>)
+    37816    0.012    0.000    0.020    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4600(num_mutations)
+    72965    0.019    0.000    0.019    0.000 {method 'pop' of 'list' objects}
+     3448    0.014    0.000    0.019    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:147(add_site)
+    82998    0.018    0.000    0.018    0.000 {built-in method math.floor}
+    37816    0.018    0.000    0.018    0.000 {method 'get_mutation' of '_tskit.TreeSequence' objects}
+    12539    0.015    0.000    0.015    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:62(free)
+        5    0.000    0.000    0.015    0.003 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4306(dump_tables)
+        5    0.014    0.003    0.014    0.003 {method 'dump_tables' of '_tskit.TreeSequence' objects}
+        2    0.002    0.001    0.013    0.007 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:179(pack_strings)
+9280/9254    0.013    0.000    0.013    0.000 {built-in method builtins.getattr}
+        2    0.000    0.000    0.012    0.006 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2950(parse_nwk)
+     38/2    0.001    0.000    0.012    0.006 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3016(parse_nwk_str)
+        2    0.011    0.006    0.011    0.006 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:139(pack_bytes)
+       38    0.010    0.000    0.011    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:2992(bracket_split)
+    32261    0.006    0.000    0.009    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:994(<genexpr>)
+    32261    0.006    0.000    0.009    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:993(<genexpr>)
         1    0.000    0.000    0.009    0.009 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1100(sim_ancestry)
-     6341    0.009    0.000    0.009    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1281(get_total_recombination_rate)
-6371/6345    0.009    0.000    0.009    0.000 {built-in method builtins.getattr}
-    12710    0.009    0.000    0.009    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:577(sequence_length)
-    27821    0.006    0.000    0.009    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:994(<genexpr>)
-    27821    0.006    0.000    0.009    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:993(<genexpr>)
-        1    0.000    0.000    0.009    0.009 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:797(_parse_sim_ancestry)
-        2    0.008    0.004    0.009    0.004 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:139(pack_bytes)
-     9966    0.008    0.000    0.008    0.000 {built-in method builtins.min}
-     6341    0.008    0.000    0.008    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1287(get_total_gc_rate)
-    27604    0.008    0.000    0.008    0.000 {method 'random' of '_random.Random' objects}
-       10    0.000    0.000    0.008    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4223(load_tables)
-     1406    0.001    0.000    0.008    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:227(decode)
-    11524    0.008    0.000    0.008    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:440(<lambda>)
-    28083    0.007    0.000    0.007    0.000 {method 'split' of 'str' objects}
-     1406    0.007    0.000    0.007    0.000 {method 'decode' of '_tskit.Variant' objects}
-       10    0.007    0.001    0.007    0.001 {method 'load_tables' of '_tskit.TreeSequence' objects}
-     4020    0.006    0.000    0.007    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:494(uniform)
-    27820    0.006    0.000    0.006    0.000 {method 'splitlines' of 'str' objects}
-     1080    0.000    0.000    0.006    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:985(total_branch_length)
-    27306    0.006    0.000    0.006    0.000 {method 'get_num_mutations' of '_tskit.TreeSequence' objects}
-     1080    0.006    0.000    0.006    0.000 {method 'get_total_branch_length' of '_tskit.Tree' objects}
-     3065    0.005    0.000    0.006    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:400(add)
-    17133    0.006    0.000    0.006    0.000 {built-in method builtins.issubclass}
-        2    0.000    0.000    0.006    0.003 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1198(finalise)
+    37816    0.008    0.000    0.008    0.000 {method 'get_num_mutations' of '_tskit.TreeSequence' objects}
+    32523    0.008    0.000    0.008    0.000 {method 'split' of 'str' objects}
+        1    0.000    0.000    0.008    0.008 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:797(_parse_sim_ancestry)
+    25869    0.008    0.000    0.008    0.000 {built-in method builtins.issubclass}
+     8611    0.008    0.000    0.008    0.000 {method 'flat' of '_msprime.RandomGenerator' objects}
+    11503    0.007    0.000    0.007    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:443(<lambda>)
+    32260    0.007    0.000    0.007    0.000 {method 'splitlines' of 'str' objects}
+     8619    0.006    0.000    0.006    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2974(_prod_dispatcher)
+     3448    0.005    0.000    0.005    0.000 <string>:2(__init__)
         1    0.000    0.000    0.005    0.005 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:1109(insert_populations)
         1    0.000    0.000    0.005    0.005 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:83(_build_population_table)
+    17805    0.005    0.000    0.005    0.000 {method 'get' of 'dict' objects}
         3    0.000    0.000    0.005    0.002 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:624(__init__)
-        2    0.000    0.000    0.005    0.003 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3576(sort)
-        2    0.005    0.003    0.005    0.003 {method 'sort' of '_tskit.TableCollection' objects}
+    39339    0.005    0.000    0.005    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4432(table_metadata_schemas)
         4    0.000    0.000    0.005    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:307(check_schema)
-     5707    0.005    0.000    0.005    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2974(_prod_dispatcher)
-     4721    0.005    0.000    0.005    0.000 {method 'add_row' of '_tskit.NodeTable' objects}
-        5    0.000    0.000    0.005    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:350(iter_errors)
-     17/5    0.000    0.000    0.005    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:290(properties)
-   102/18    0.000    0.000    0.005    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:397(descend)
-     2423    0.004    0.000    0.004    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:44(__init__)
-     3062    0.003    0.000    0.004    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:352(remove)
-     1083    0.004    0.000    0.004    0.000 {method 'set_root_threshold' of '_tskit.Tree' objects}
+        5    0.000    0.000    0.004    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:350(iter_errors)
+     17/5    0.000    0.000    0.004    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:290(properties)
+   102/18    0.000    0.000    0.004    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:397(descend)
+     1965    0.002    0.000    0.004    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:236(copy)
+       76    0.003    0.000    0.004    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:431(get_emerged_from_lineage)
     36/16    0.000    0.000    0.004    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:274(ref)
-    11981    0.004    0.000    0.004    0.000 {method 'get' of 'dict' objects}
-     2486    0.004    0.000    0.004    0.000 <string>:2(__init__)
-     2415    0.003    0.000    0.003    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\avltree.py:62(free)
-    28426    0.003    0.000    0.003    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4432(table_metadata_schemas)
-        2    0.000    0.000    0.003    0.002 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3313(verify)
         2    0.000    0.000    0.003    0.002 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:977(initialise)
-     9981    0.003    0.000    0.003    0.000 {method 'pop' of 'list' objects}
+        2    0.000    0.000    0.003    0.002 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3316(verify)
+       11    0.003    0.000    0.003    0.000 {method 'extend' of 'list' objects}
         5    0.000    0.000    0.003    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:36(additionalProperties)
-     1406    0.001    0.000    0.003    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:236(copy)
+     8811    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
         3    0.000    0.000    0.003    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2237(add_row)
-     8587    0.002    0.000    0.002    0.000 {built-in method math.floor}
         2    0.000    0.000    0.002    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:742(parse_metadata_schema)
-     1371    0.002    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:161(genotypes)
         2    0.000    0.000    0.002    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:143(__init__)
-     4617    0.002    0.000    0.002    0.000 {method 'index' of 'list' objects}
-     5896    0.002    0.000    0.002    0.000 {method 'items' of 'dict' objects}
-       76    0.002    0.000    0.002    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:431(get_emerged_from_lineage)
-       99    0.001    0.000    0.002    0.000 {built-in method math.prod}
+     1486    0.002    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:721(_make_arrays)
+     1604    0.001    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:161(genotypes)
+     3456    0.002    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2931(sites)
+     1483    0.002    0.000    0.002    0.000 {method 'get_site' of '_tskit.TreeSequence' objects}
+     1965    0.002    0.000    0.002    0.000 {built-in method _functools.cmp_to_key}
+     1965    0.002    0.000    0.002    0.000 {method 'restricted_copy' of '_tskit.Variant' objects}
+        2    0.000    0.000    0.002    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3209(verify_overlaps)
+     3448    0.002    0.000    0.002    0.000 {method 'get_row' of '_tskit.SiteTable' objects}
        32    0.000    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:460(_validate_reference)
-        2    0.000    0.000    0.002    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3206(verify_overlaps)
        32    0.000    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:643(lookup)
-        5    0.000    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4306(dump_tables)
-        8    0.000    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:337(anyOf)
-        5    0.000    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:48(__init__)
-        2    0.000    0.000    0.002    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3250(verify_mass_index)
-     1080    0.002    0.000    0.002    0.000 {method 'get_site' of '_tskit.TreeSequence' objects}
-        1    0.001    0.001    0.002    0.002 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1377(__init__)
-     2494    0.002    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2931(sites)
-     1083    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:721(_make_arrays)
-     1406    0.001    0.000    0.001    0.000 {built-in method _functools.cmp_to_key}
-     1406    0.001    0.000    0.001    0.000 {method 'restricted_copy' of '_tskit.Variant' objects}
-     2486    0.001    0.000    0.001    0.000 {method 'get_row' of '_tskit.SiteTable' objects}
+     1497    0.001    0.000    0.002    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4513(sequence_length)
+     1483    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4585(num_sites)
+     3448    0.001    0.000    0.001    0.000 {method 'add_row' of '_tskit.SiteTable' objects}
+        8    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:337(anyOf)
+      128    0.001    0.000    0.001    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1331(find_hgt_left_individual)
+       99    0.001    0.000    0.001    0.000 {built-in method math.prod}
+        1    0.001    0.001    0.001    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1377(__init__)
+        5    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:48(__init__)
+     3087    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:128(_check_decoded)
+        2    0.000    0.000    0.001    0.001 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3253(verify_mass_index)
        32    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:249(pointer)
-     2486    0.001    0.000    0.001    0.000 {method 'add_row' of '_tskit.SiteTable' objects}
-     1094    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4513(sequence_length)
-     2451    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:128(_check_decoded)
-     1080    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4585(num_sites)
         9    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2873(__init__)
-       94    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:340(evolve)
-       10    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4105(__init__)
-     5049    0.001    0.000    0.001    0.000 simulator.py:66(<genexpr>)
+     1483    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4581(get_num_sites)
+     1497    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4528(get_sequence_length)
        40    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:6031(node)
-        5    0.001    0.000    0.001    0.000 {method 'dump_tables' of '_tskit.TreeSequence' objects}
-        8    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_legacy_keywords.py:124(items_draft6_draft7_draft201909)
+       10    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4105(__init__)
+       94    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:340(evolve)
+     1483    0.001    0.000    0.001    0.000 {method 'get_row' of '_tskit.MutationTable' objects}
+       37    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:476(__getattr__)
+     1486    0.001    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4182(ll_tree_sequence)
+     5049    0.001    0.000    0.001    0.000 simulator.py:66(<genexpr>)
         1    0.000    0.000    0.001    0.001 {method 'write' of '_io.TextIOWrapper' objects}
-     1080    0.001    0.000    0.001    0.000 {method 'get_row' of '_tskit.MutationTable' objects}
-     1094    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4528(get_sequence_length)
-     1080    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4581(get_num_sites)
-        1    0.000    0.000    0.001    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:658(_wrap_replicates)
-        2    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1583(run_replicates)
-     1439    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x00007FFC379B1700}
-      100    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:283(__attrs_post_init__)
-       76    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:341(choice)
+     1998    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x00007FFC2DBB1700}
+        8    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_legacy_keywords.py:124(items_draft6_draft7_draft201909)
         1    0.001    0.001    0.001    0.001 {built-in method _io.open}
+      154    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:484(__setattr__)
+        1    0.000    0.000    0.001    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:658(_wrap_replicates)
        94    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:690(in_subresource)
-     1083    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4182(ll_tree_sequence)
-        2    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:687(_parse_rate_map)
+        2    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1583(run_replicates)
        64    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\jsonschema.py:338(maybe_in_subresource)
-       66    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:710(__init__)
-        2    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:445(uniform)
-        1    0.000    0.000    0.001    0.001 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\encodings\cp1252.py:18(encode)
+      100    0.000    0.000    0.001    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:283(__attrs_post_init__)
+       76    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:341(choice)
+       66    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:710(__init__)
+     1966    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+     1636    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\encodings\cp1252.py:18(encode)
         1    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_encode}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:687(_parse_rate_map)
        75    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:351(__init__)
-      154    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:484(__setattr__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:445(uniform)
+     1497    0.000    0.000    0.000    0.000 {method 'get_sequence_length' of '_tskit.TreeSequence' objects}
         5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\function_base.py:5369(insert)
-     1414    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
-       82    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:242(_randbelow_with_getrandbits)
-       39    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:282(type)
-     1407    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
-       98    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:1335(validator_for)
+     1483    0.000    0.000    0.000    0.000 {method 'get_num_sites' of '_tskit.TreeSequence' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:766(_parse_samples)
-     1094    0.000    0.000    0.000    0.000 {method 'get_sequence_length' of '_tskit.TreeSequence' objects}
-     42/4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:118(deepcopy)
-     1080    0.000    0.000    0.000    0.000 {method 'get_num_sites' of '_tskit.TreeSequence' objects}
-       50    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\attr\_funcs.py:397(evolve)
-       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:539(urljoin)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:19(__getitem__)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:814(nancumsum)
-      109    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:453(is_type)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:996(validate)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:706(_evolve)
-       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2322(any)
-      132    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:160(create_resource)
-        6    0.000    0.000    0.000    0.000 {method 'poisson' of 'numpy.random.mtrand.RandomState' objects}
-       40    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:476(__getattr__)
-       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:269(enum)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:12(normalize)
-       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:856(__init__)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:648(copy)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1393(moveaxis)
-      3/2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:247(_reconstruct)
-      109    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:90(is_type)
-       14    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1331(find_hgt_left_individual)
-      194    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_legacy_keywords.py:9(ignore_ref_siblings)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:138(unique)
-      100    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:222(id)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:191(_deepcopy_list)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:581(resolver_with_root)
-       16    0.000    0.000    0.000    0.000 <frozen _collections_abc>:811(__contains__)
-       44    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:520(urlunsplit)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:332(randint)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1551(run)
-      4/2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:217(_deepcopy_dict)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:323(_unique1d)
-     1083    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4186(get_ll_tree_sequence)
-       82    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:285(<genexpr>)
-     1082    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:733(tree_sequence)
+       82    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:242(_randbelow_with_getrandbits)
         4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:656(asdict)
-       18    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:819(_iter_items_forward)
+       50    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\attr\_funcs.py:397(evolve)
+       98    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:1335(validator_for)
+     42/4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:118(deepcopy)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:113(__init__)
+       39    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:282(type)
+       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:539(urljoin)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:996(validate)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:19(__getitem__)
+      109    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:453(is_type)
+        6    0.000    0.000    0.000    0.000 {method 'poisson' of 'numpy.random.mtrand.RandomState' objects}
+     1486    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4186(get_ll_tree_sequence)
+      132    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:160(create_resource)
+       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:856(__init__)
+       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:269(enum)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:706(_evolve)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:12(normalize)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:814(nancumsum)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:648(copy)
+       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2322(any)
+       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:819(_iter_items_forward)
+      109    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:90(is_type)
+      3/2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:247(_reconstruct)
+     1485    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:733(tree_sequence)
+      482    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:143(alleles)
+       16    0.000    0.000    0.000    0.000 <frozen _collections_abc>:811(__contains__)
+      194    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_legacy_keywords.py:9(ignore_ref_siblings)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1393(moveaxis)
+      100    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:222(id)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:581(resolver_with_root)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:708(_insert_sample_sets)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:138(unique)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:332(randint)
+       82    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:285(<genexpr>)
+       44    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:520(urlunsplit)
+       90    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:191(_deepcopy_list)
       369    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+      4/2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:217(_deepcopy_dict)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:323(_unique1d)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3326(fromdict)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1585(roots)
+        6    0.000    0.000    0.000    0.000 {method 'sort' of 'numpy.ndarray' objects}
+       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:829(_iter_items)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:333(geturl)
        93    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:119(_coerce_args)
        20    0.000    0.000    0.000    0.000 <attrs generated init jsonschema.validators.create.<locals>.Validator>:1(__init__)
-       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:374(urlparse)
-        1    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:708(_insert_sample_sets)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:333(geturl)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1585(roots)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:2119(isolated_model)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2724(newick)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:68(_replace_nan)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3326(fromdict)
         6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:509(with_resource)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2613(as_newick)
-       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:121(span)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:291(randrange)
-       40    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:646(increment_interval)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:515(with_resources)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:2119(isolated_model)
         3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2692(max)
-      326    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:143(alleles)
-      100    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\jsonschema.py:53(_legacy_dollar_id)
+        1    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+       40    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:646(increment_interval)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:291(randrange)
+       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:374(urlparse)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1551(run)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:515(with_resources)
+       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:121(span)
        20    0.000    0.000    0.000    0.000 {built-in method builtins.all}
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:399(_parse_random_seed)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:405(get_or_retrieve)
-       16    0.000    0.000    0.000    0.000 <frozen _collections_abc>:804(get)
+      100    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\jsonschema.py:53(_legacy_dollar_id)
       132    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Resource>:1(__init__)
-        8    0.000    0.000    0.000    0.000 {method 'sort' of 'numpy.ndarray' objects}
-       25    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:136(ones)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:71(get_random_seed)
-        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:53(_wrapfunc)
-      124    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:270(<genexpr>)
-        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:206(uniqueItems)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:135(seed)
-       18    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:829(_iter_items)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5090(trees)
-       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1330(normalize_axis_tuple)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1855(isscalar)
-        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1538(__init__)
-        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1129(__init__)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2177(sum)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\referencing\_core.py:405(get_or_retrieve)
         5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\encoder.py:183(encode)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2596(_as_newick_fast)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:68(_replace_nan)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\__init__.py:183(dumps)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:213(__repr__)
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:61(canonical_json)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1855(isscalar)
+      124    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:270(<genexpr>)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3048(asdict)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2724(newick)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:53(_wrapfunc)
+        1    0.000    0.000    0.000    0.000 {method 'asdict' of '_tskit.TableCollection' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:449(validate)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5090(trees)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:206(uniqueItems)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2613(as_newick)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\encoder.py:205(iterencode)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:740(_parse_sample_sets)
-       88    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2512(cumsum)
-        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1323(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1181(set_columns)
+       16    0.000    0.000    0.000    0.000 <frozen _collections_abc>:804(get)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1299(asdict)
+        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1129(__init__)
        50    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\attr\_make.py:1699(fields)
-       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2232(__init__)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1799(set_columns)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3193(verify_segments)
+        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1538(__init__)
         9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1753(__init__)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2177(sum)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1799(set_columns)
+       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2232(__init__)
+       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1330(normalize_axis_tuple)
+        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1323(__init__)
         9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1969(__init__)
        12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:509(urlunparse)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\__init__.py:183(dumps)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\validators.py:449(validate)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:50(get_provenance_dict)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1299(asdict)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:557(__init__)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:73(get_environment)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:713(__call__)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:64(_get_environment)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1523(_run_until)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:3190(verify_segments)
-        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2347(__init__)
-        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:156(uniq)
      11/2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1323(_asdict_inner)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:225(asdict)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\encoder.py:205(iterencode)
-       48    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4626(num_nodes)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_sim_args.py:9(__init__)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5060(first)
-        3    0.000    0.000    0.000    0.000 {method '__reduce_ex__' of 'object' objects}
-       42    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1207(right_sib)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:116(set_printoptions)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:126(__init__)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\util.py:61(canonical_json)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\provenance.py:52(get_environment)
-       50    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Resolver>:1(__init__)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:64(_make_options_dict)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:147(mass)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:741(__init__)
-       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:597(clear)
-      112    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:127(equal)
-      139    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3048(asdict)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:909(set_columns)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:452(urlsplit)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:268(__post_init__)
-        1    0.000    0.000    0.000    0.000 {method 'asdict' of '_tskit.TableCollection' objects}
-        1    0.000    0.000    0.000    0.000 {method 'item' of 'torch._C.TensorBase' objects}
-       78    0.000    0.000    0.000    0.000 {method 'rsplit' of 'str' objects}
         1    0.000    0.000    0.000    0.000 {method 'fromdict' of '_tskit.TableCollection' objects}
-       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:4048(has_index)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:568(recomb_mass)
-        2    0.000    0.000    0.000    0.000 {numpy.random.mtrand.seed}
-        1    0.000    0.000    0.000    0.000 {method 'get_newick' of '_tskit.Tree' objects}
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:303(items)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:216(<genexpr>)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:225(asdict)
+        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2347(__init__)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2512(cumsum)
+       50    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Resolver>:1(__init__)
         1    0.000    0.000    0.000    0.000 {method 'fromdict' of 'LightweightTableCollection' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\__init__.py:299(loads)
-        1    0.000    0.000    0.000    0.000 {method 'asdict' of 'LightweightTableCollection' objects}
-        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.SiteTable' objects}
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1116(__new__)
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        5    0.000    0.000    0.000    0.000 {method 'cumsum' of 'numpy.ndarray' objects}
-       32    0.000    0.000    0.000    0.000 {method 'get' of 'rpds.HashTrieMap' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2417(add_row)
-       40    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\exceptions.py:53(__init__)
+       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:136(ones)
+       15    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:231(_keep_alive)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1523(_run_until)
+       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:597(clear)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:557(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:156(uniq)
+       48    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4626(num_nodes)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:116(set_printoptions)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:399(_parse_random_seed)
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:135(seed)
+       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:358(remove_individual)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:2596(_as_newick_fast)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:303(items)
+        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.NodeTable' objects}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:713(__call__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:64(_make_options_dict)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:909(set_columns)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:71(get_random_seed)
+      139    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:452(urlsplit)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:50(get_provenance_dict)
+       42    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1207(right_sib)
+      112    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:127(equal)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_sim_args.py:9(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:73(get_environment)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:147(mass)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:64(_get_environment)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\provenance.py:232(json_encode_provenance)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1181(set_columns)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1489(_resolve_missing_intervals)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:741(__init__)
+        2    0.000    0.000    0.000    0.000 {numpy.random.mtrand.seed}
+        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.SiteTable' objects}
+       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:4048(has_index)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\exceptions.py:53(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:806(iter_items)
+        3    0.000    0.000    0.000    0.000 {method '__reduce_ex__' of 'object' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\__init__.py:299(loads)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:568(recomb_mass)
+        1    0.000    0.000    0.000    0.000 {method 'asdict' of 'LightweightTableCollection' objects}
         3    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-      155    0.000    0.000    0.000    0.000 {method 'getrandbits' of '_random.Random' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1489(_resolve_missing_intervals)
+       78    0.000    0.000    0.000    0.000 {method 'rsplit' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5060(first)
+       12    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5188(_check_genomic_range)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:1332(searchsorted)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:209(set_growth_rate)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:124(default_validator)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\genotypes.py:113(__init__)
-       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:672(unquote)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4007(__next__)
-       80    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
-        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\exceptions.py:160(_set)
-        3    0.000    0.000    0.000    0.000 {function Random.seed at 0x000001B606F2CFE0}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\provenance.py:52(get_environment)
+      176    0.000    0.000    0.000    0.000 {method 'getrandbits' of '_random.Random' objects}
+       32    0.000    0.000    0.000    0.000 {method 'get' of 'rpds.HashTrieMap' objects}
         8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:355(_check_required_args)
-       82    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
-        1    0.000    0.000    0.000    0.000 {function Simulator.run at 0x000001B608AC1120}
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:806(iter_items)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1346(left_root)
-       32    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Retrieved>:1(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:1332(searchsorted)
+        1    0.000    0.000    0.000    0.000 {method 'item' of 'torch._C.TensorBase' objects}
+       80    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:124(default_validator)
+       32    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:672(unquote)
+        1    0.000    0.000    0.000    0.000 {function Simulator.run at 0x00000150DA131120}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4007(__next__)
+        1    0.000    0.000    0.000    0.000 {method 'get_newick' of '_tskit.Tree' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:209(set_growth_rate)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\exceptions.py:160(_set)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1116(__new__)
+       25    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
        59    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:48(is_object)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:358(remove_individual)
+       32    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Retrieved>:1(__init__)
+       82    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:268(__post_init__)
+        3    0.000    0.000    0.000    0.000 {function Random.seed at 0x00000150D855CFE0}
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1346(left_root)
        32    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Resolved>:1(__init__)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:95(isinteger)
-       95    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+        5    0.000    0.000    0.000    0.000 {method 'cumsum' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2417(add_row)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:156(encode)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\decoder.py:332(decode)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1559(has_single_root)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:194(minItems)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:128(__init__)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:235(get_size)
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:95(isinteger)
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_mutations.py:129(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\random.py:126(__init__)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1529(info)
+        3    0.000    0.000    0.000    0.000 {method 'add_row' of '_tskit.PopulationTable' objects}
+       95    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:274(full)
+       75    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:633(__init__)
         2    0.000    0.000    0.000    0.000 {method 'searchsorted' of 'numpy.ndarray' objects}
+       39    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:95(ensure_list)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:235(get_size)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1677(interval)
+       13    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:69(find_additional_properties)
+       40    0.000    0.000    0.000    0.000 {method 'get_node' of '_tskit.TreeSequence' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1737(_as_lowlevel)
        10    0.000    0.000    0.000    0.000 {method 'get_table_metadata_schemas' of '_tskit.TreeSequence' objects}
         3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copyreg.py:107(_slotnames)
-       39    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:95(ensure_list)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1529(info)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1677(interval)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1517(debug)
-       15    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:231(_keep_alive)
-       40    0.000    0.000    0.000    0.000 {method 'get_node' of '_tskit.TreeSequence' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:430(__enter__)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:95(_parse_model_arg)
-       13    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:69(find_additional_properties)
+        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.IndividualTable' objects}
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.vars}
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:33(seterr)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:274(missing_intervals)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:430(__enter__)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:412(iter_label)
         6    0.000    0.000    0.000    0.000 {method 'insert' of 'rpds.HashTrieMap' objects}
         8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:595(__init__)
-        3    0.000    0.000    0.000    0.000 {method 'add_row' of '_tskit.PopulationTable' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2836(min)
-       10    0.000    0.000    0.000    0.000 {built-in method builtins.vars}
-       44    0.000    0.000    0.000    0.000 {built-in method math.isclose}
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1776(getEffectiveLevel)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:274(full)
-        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.IndividualTable' objects}
-       75    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:982(_validate_populations)
-       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:105(right)
-        6    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Registry>:1(__init__)
-        6    0.000    0.000    0.000    0.000 {method 'insert' of 'rpds.HashTrieSet' objects}
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:234(_acquireLock)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:281(is_empty)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:95(_parse_model_arg)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:1236(append_columns)
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:684(_make_segment)
-       16    0.000    0.000    0.000    0.000 {method 'push_front' of 'rpds.List' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:59(_model_factory)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1268(get_potential_destinations)
         7    0.000    0.000    0.000    0.000 {built-in method numpy.zeros}
-       36    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:22(is_array)
-        3    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
-       50    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\attr\_compat.py:99(get_generic_base)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1737(_as_lowlevel)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:274(missing_intervals)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:156(encode)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2421(all)
-       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:164(<genexpr>)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1401(_missing_)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:304(required)
-       48    0.000    0.000    0.000    0.000 {method 'get_num_nodes' of '_tskit.TreeSequence' objects}
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:281(is_empty)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2266(set_columns)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:976(append_columns)
-       73    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:741(metadata_schema)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2987(sequence_length)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:423(repeat)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:67(zeros_like)
-       42    0.000    0.000    0.000    0.000 {method 'get_right_sib' of '_tskit.Tree' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1742(asdict)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:252(<genexpr>)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2266(set_columns)
+        6    0.000    0.000    0.000    0.000 {method 'insert' of 'rpds.HashTrieSet' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2421(all)
+       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:105(right)
+       36    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:22(is_array)
+       44    0.000    0.000    0.000    0.000 {built-in method math.isclose}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:982(_validate_populations)
+       16    0.000    0.000    0.000    0.000 {method 'push_front' of 'rpds.List' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:423(repeat)
         6    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:304(required)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:59(_model_factory)
+        6    0.000    0.000    0.000    0.000 <attrs generated init referencing._core.Registry>:1(__init__)
+       50    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\attr\_compat.py:99(get_generic_base)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_keywords.py:194(minItems)
+       48    0.000    0.000    0.000    0.000 {method 'get_num_nodes' of '_tskit.TreeSequence' objects}
+       16    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:853(<lambda>)
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1269(fields)
-       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:98(left)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:778(next)
-        2    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.NodeTable' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\decoder.py:343(raw_decode)
-        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:412(iter_label)
-        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:827(__init__)
-        4    0.000    0.000    0.000    0.000 {method '__deepcopy__' of 'numpy.generic' objects}
-        1    0.000    0.000    0.000    0.000 {method 'add_row' of '_tskit.ProvenanceTable' objects}
-       93    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:108(_noop)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:732(null)
-        2    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1106(left_child)
-       28    0.000    0.000    0.000    0.000 {built-in method _operator.index}
-       10    0.000    0.000    0.000    0.000 {method 'has_index' of '_tskit.TableCollection' objects}
-        4    0.000    0.000    0.000    0.000 <string>:1(<lambda>)
+       24    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:164(<genexpr>)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:976(append_columns)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:234(_acquireLock)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1559(has_single_root)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:1268(get_potential_destinations)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:67(zeros_like)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:741(metadata_schema)
         1    0.000    0.000    0.000    0.000 {method 'set_columns' of '_tskit.PopulationTable' objects}
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1547(num_roots)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1627(root)
-       15    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+       42    0.000    0.000    0.000    0.000 {method 'get_right_sib' of '_tskit.Tree' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1517(debug)
+       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:98(left)
+       73    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2836(min)
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:851(_get_in_range_func)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2987(sequence_length)
+        9    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:827(__init__)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:778(next)
+        4    0.000    0.000    0.000    0.000 {method '__deepcopy__' of 'numpy.generic' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\enum.py:1401(_missing_)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\decoder.py:343(raw_decode)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:252(<genexpr>)
+        4    0.000    0.000    0.000    0.000 <string>:1(<lambda>)
         1    0.000    0.000    0.000    0.000 {method 'append_columns' of '_tskit.NodeTable' objects}
-       34    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\multiarray.py:1080(copyto)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:851(_get_in_range_func)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:258(get_common_ancestor_waiting_time_hudson)
-        6    0.000    0.000    0.000    0.000 {method 'flatten' of 'numpy.ndarray' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method math.exp}
-        1    0.000    0.000    0.000    0.000 {method 'repeat' of 'numpy.ndarray' objects}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1322(virtual_root)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:218(set_start_size)
+       93    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:108(_noop)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
         7    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1287(_is_dataclass_instance)
-        1    0.000    0.000    0.000    0.000 {method 'finalise_tables' of '_msprime.Simulator' objects}
-       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2317(_any_dispatcher)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1106(left_child)
+        1    0.000    0.000    0.000    0.000 {method 'repeat' of 'numpy.ndarray' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1627(root)
+        1    0.000    0.000    0.000    0.000 {method 'add_row' of '_tskit.ProvenanceTable' objects}
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1547(num_roots)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:732(null)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:68(__getitem__)
-        5    0.000    0.000    0.000    0.000 {method 'transpose' of 'numpy.ndarray' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1143(python_implementation)
-        5    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:413(_splitnetloc)
-       20    0.000    0.000    0.000    0.000 {built-in method math.comb}
-        5    0.000    0.000    0.000    0.000 {method 'item' of 'numpy.ndarray' objects}
-       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:853(<lambda>)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:951(__getitem__)
-       14    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:139(rate)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:243(_releaseLock)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:228(validate)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:637(overlaps_at)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\decoder.py:284(__init__)
-        8    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:403(_get_formatdict)
+       15    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+       28    0.000    0.000    0.000    0.000 {built-in method _operator.index}
         5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\encoder.py:105(__init__)
-        1    0.000    0.000    0.000    0.000 {method 'append_columns' of '_tskit.IndividualTable' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:764(first)
-       46    0.000    0.000    0.000    0.000 <frozen _collections_abc>:435(__subclasshook__)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:132(geterr)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:983(system)
+       10    0.000    0.000    0.000    0.000 {method 'has_index' of '_tskit.TableCollection' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:951(__getitem__)
+       12    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2317(_any_dispatcher)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:637(overlaps_at)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:258(get_common_ancestor_waiting_time_hudson)
+       14    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:139(rate)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:413(_splitnetloc)
+        4    0.000    0.000    0.000    0.000 {method 'flatten' of 'numpy.ndarray' objects}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1776(getEffectiveLevel)
+        1    0.000    0.000    0.000    0.000 {method 'finalise_tables' of '_msprime.Simulator' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:403(_get_formatdict)
+       21    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\multiarray.py:1080(copyto)
+        5    0.000    0.000    0.000    0.000 {method 'item' of 'numpy.ndarray' objects}
+        5    0.000    0.000    0.000    0.000 {method 'transpose' of 'numpy.ndarray' objects}
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1322(virtual_root)
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:418(iter_ancestors)
-        1    0.000    0.000    0.000    0.000 {built-in method now}
-        4    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
-       10    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.normalize_axis_index}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1572(has_multiple_roots)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:3995(__init__)
-        7    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2953(populations)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:125(_unpack_tuple)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copyreg.py:98(__newobj__)
-        1    0.000    0.000    0.000    0.000 {method 'reset' of '_msprime.Simulator' objects}
-       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:52(is_string)
-        2    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:435(__exit__)
-       17    0.000    0.000    0.000    0.000 {built-in method numpy.asanyarray}
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1045(_sys_version)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:615(count)
-        1    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:810(_nancumsum_dispatcher)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:73(__setitem__)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2887(individuals)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2508(_cumsum_dispatcher)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1731(__init__)
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:663(__repr__)
-       27    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:172(_deepcopy_atomic)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:974(num_populations)
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\function_base.py:5365(_insert_dispatcher)
-        2    0.000    0.000    0.000    0.000 {built-in method math.log10}
-       16    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1284(<genexpr>)
-        8    0.000    0.000    0.000    0.000 {method 'appendleft' of 'collections.deque' objects}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1389(_moveaxis_dispatcher)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:139(is_schema_trivial)
-        5    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
-        1    0.000    0.000    0.000    0.000 {method 'first' of '_tskit.Tree' objects}
-        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2172(_sum_dispatcher)
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.round}
-       24    0.000    0.000    0.000    0.000 <frozen _collections_abc>:341(__subclasshook__)
-       16    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:145(unbool)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1406(time)
-        6    0.000    0.000    0.000    0.000 {built-in method convert}
-        2    0.000    0.000    0.000    0.000 {built-in method time.time}
-        1    0.000    0.000    0.000    0.000 {method '__deepcopy__' of 'numpy.ndarray' objects}
-        5    0.000    0.000    0.000    0.000 {method 'get_left_child' of '_tskit.Tree' objects}
-        4    0.000    0.000    0.000    0.000 {method 'next' of '_tskit.Tree' objects}
-        4    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
-        7    0.000    0.000    0.000    0.000 {built-in method numpy.asarray}
+        5    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
         3    0.000    0.000    0.000    0.000 {method 'clear' of '_tskit.EdgeTable' objects}
+        8    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'append_columns' of '_tskit.IndividualTable' objects}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:243(_releaseLock)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:139(is_schema_trivial)
+        2    0.000    0.000    0.000    0.000 {built-in method math.exp}
+        2    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+        8    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\bintrees\abctree.py:615(count)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1143(python_implementation)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\json\decoder.py:284(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:132(geterr)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:228(validate)
+       46    0.000    0.000    0.000    0.000 <frozen _collections_abc>:435(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:983(system)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2887(individuals)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\OneDrive\PhD\Project No.2\pangenome-gene-transfer-simulation\hgt_simulation.py:218(set_start_size)
+       10    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.normalize_axis_index}
+       10    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:52(is_string)
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:663(__repr__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:3995(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:764(first)
+        4    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copyreg.py:98(__newobj__)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\nanfunctions.py:810(_nancumsum_dispatcher)
+        9    0.000    0.000    0.000    0.000 {built-in method math.comb}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:435(__exit__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:73(__setitem__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1572(has_multiple_roots)
+        7    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2953(populations)
+        1    0.000    0.000    0.000    0.000 {method 'reset' of '_msprime.Simulator' objects}
+       24    0.000    0.000    0.000    0.000 <frozen _collections_abc>:341(__subclasshook__)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\demography.py:974(num_populations)
+       16    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2172(_sum_dispatcher)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\function_base.py:5365(_insert_dispatcher)
+       11    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1284(<genexpr>)
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:1389(_moveaxis_dispatcher)
+        1    0.000    0.000    0.000    0.000 {built-in method now}
+        7    0.000    0.000    0.000    0.000 {built-in method numpy.asarray}
+       13    0.000    0.000    0.000    0.000 {built-in method numpy.asanyarray}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:125(_unpack_tuple)
+        8    0.000    0.000    0.000    0.000 {method 'appendleft' of 'collections.deque' objects}
+        5    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
+        5    0.000    0.000    0.000    0.000 {method 'get_left_child' of '_tskit.Tree' objects}
+        5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2508(_cumsum_dispatcher)
+       27    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\copy.py:172(_deepcopy_atomic)
+        1    0.000    0.000    0.000    0.000 {method 'isoformat' of 'datetime.datetime' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.round}
+        1    0.000    0.000    0.000    0.000 {method 'first' of '_tskit.Tree' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1045(_sys_version)
+       16    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_utils.py:145(unbool)
+        4    0.000    0.000    0.000    0.000 {method 'next' of '_tskit.Tree' objects}
         4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\logging\__init__.py:1369(disable)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:291(asdict)
-        2    0.000    0.000    0.000    0.000 {method 'isidentifier' of 'str' objects}
         3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2687(_max_dispatcher)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:26(is_bool)
-        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:106(_parse_flag)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:291(asdict)
+        4    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 {built-in method convert}
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:186(__init__)
         5    0.000    0.000    0.000    0.000 {method 'keys' of 'dict' objects}
         9    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 <frozen codecs>:186(__init__)
         2    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
-        1    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
-        3    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1731(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:1406(time)
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\core.py:106(_parse_flag)
+        2    0.000    0.000    0.000    0.000 {built-in method math.log10}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\jsonschema\_types.py:26(is_bool)
+        2    0.000    0.000    0.000    0.000 {built-in method time.time}
         7    0.000    0.000    0.000    0.000 {method 'items' of 'collections.OrderedDict' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1478(_choose_num_labels)
+        2    0.000    0.000    0.000    0.000 {method 'isidentifier' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 {method 'clear' of '_tskit.IndividualTable' objects}
+        4    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 {method '__deepcopy__' of 'numpy.ndarray' objects}
         3    0.000    0.000    0.000    0.000 {method 'clear' of '_tskit.MutationTable' objects}
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:4000(__iter__)
+        3    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.set_legacy_print_mode}
         6    0.000    0.000    0.000    0.000 {method 'get_num_roots' of '_tskit.Tree' objects}
+        5    0.000    0.000    0.000    0.000 {method 'get_virtual_root' of '_tskit.Tree' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1155(python_version)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:992(node)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1011(version)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:1478(_choose_num_labels)
-        4    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
-        4    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:835(<genexpr>)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3013(time_units)
         1    0.000    0.000    0.000    0.000 {method 'copy' of 'numpy.ndarray' objects}
         3    0.000    0.000    0.000    0.000 {method 'clear' of '_tskit.SiteTable' objects}
-        6    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:133(_unique_dispatcher)
-        1    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
-        5    0.000    0.000    0.000    0.000 {method 'get_virtual_root' of '_tskit.Tree' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:3013(time_units)
         1    0.000    0.000    0.000    0.000 {method 'lstrip' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {method 'get_left' of '_tskit.Tree' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:992(node)
         2    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method math.ceil}
-        1    0.000    0.000    0.000    0.000 {built-in method _tskit.get_kastore_version}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1002(release)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\urllib\parse.py:421(_checknetloc)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1020(machine)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5871(sites_position)
-        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:156(missing)
-        2    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
-        1    0.000    0.000    0.000    0.000 {method 'move_to_end' of 'collections.OrderedDict' objects}
-        1    0.000    0.000    0.000    0.000 {built-in method msprime._msprime.get_gsl_version}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:835(<genexpr>)
+        2    0.000    0.000    0.000    0.000 {method 'get_left' of '_tskit.Tree' objects}
         5    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:894(uname)
-        1    0.000    0.000    0.000    0.000 {built-in method numpy.core._multiarray_umath.set_legacy_print_mode}
-        2    0.000    0.000    0.000    0.000 {method 'clear' of '_tskit.IndividualTable' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1002(release)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\trees.py:5871(sites_position)
+        2    0.000    0.000    0.000    0.000 {built-in method math.ceil}
+        4    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\lib\arraysetops.py:133(_unique_dispatcher)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\platform.py:1011(version)
+        2    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+        1    0.000    0.000    0.000    0.000 {built-in method _tskit.get_kastore_version}
+        1    0.000    0.000    0.000    0.000 {built-in method msprime._msprime.get_gsl_version}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:761(<genexpr>)
+        3    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:156(missing)
+        1    0.000    0.000    0.000    0.000 {method 'move_to_end' of 'collections.OrderedDict' objects}
+        2    0.000    0.000    0.000    0.000 {method 'get_right' of '_tskit.Tree' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:185(num_missing_intervals)
         1    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
         2    0.000    0.000    0.000    0.000 {method 'isascii' of 'str' objects}
         1    0.000    0.000    0.000    0.000 {method 'isalpha' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {method 'get_right' of '_tskit.Tree' objects}
         1    0.000    0.000    0.000    0.000 {method 'get_time' of '_tskit.Tree' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:1328(_searchsorted_dispatcher)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:898(_none_or_positive_arg)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:412(_parse_replicate_index)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:185(num_missing_intervals)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2964(provenances)
         1    0.000    0.000    0.000    0.000 {method 'pop' of 'collections.deque' objects}
         1    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
-        1    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\_ufunc_config.py:426(__init__)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\arrayprint.py:898(_none_or_positive_arg)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:1328(_searchsorted_dispatcher)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\ancestry.py:761(<genexpr>)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:89(modify_schema)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\tables.py:2964(provenances)
         2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2416(_all_dispatcher)
-        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:181(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:89(modify_schema)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\msprime\intervals.py:130(position)
         1    0.000    0.000    0.000    0.000 {method 'values' of 'collections.OrderedDict' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\multiarray.py:85(empty_like)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\numeric.py:63(_zeros_like_dispatcher)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:419(_repeat_dispatcher)
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1373(<genexpr>)
-        1    0.000    0.000    0.000    0.000 {function LruCache.__getitem__ at 0x000001B608A78540}
-        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\multiarray.py:85(empty_like)
         1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\numpy\core\fromnumeric.py:2831(_min_dispatcher)
+        1    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\dataclasses.py:1373(<genexpr>)
+        2    0.000    0.000    0.000    0.000 C:\Users\uhewm\anaconda3\envs\pangenome-hgt-sim\Lib\site-packages\tskit\metadata.py:181(__init__)
+        1    0.000    0.000    0.000    0.000 {function LruCache.__getitem__ at 0x00000150DA0E8540}
 
 

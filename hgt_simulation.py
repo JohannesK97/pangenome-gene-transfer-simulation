@@ -1507,6 +1507,7 @@ class Simulator:
             )
             X = {pop.id for pop in self.P if pop.get_num_ancestors() > 0}
             assert non_empty_pops == X
+        print(self.S)
 
     def single_sweep_simulate(self):
         """
@@ -2351,6 +2352,7 @@ class Simulator:
 
         self.S[left_breakpoint] += 1
 
+        """
         # Defrag AVL Tree
         j = 0
         k = 0
@@ -2360,6 +2362,7 @@ class Simulator:
                 del self.S[k]
             else:
                 j = k
+        """
 
         #     HP
         #      |
@@ -3371,7 +3374,7 @@ def make_hull(a, L, offset=0):
 def avl_count_pairs(ost):
     return sum(value for value in ost.avl.values())
 
-
+#@profile
 def run_simulate(args):
     """
     Runs the simulation and outputs the results in text.

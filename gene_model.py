@@ -18,7 +18,7 @@ from gfs import gfs_from_matrix
 
 alleles = ["absent", "present"]
 
-#@profile
+@profile
 def gene_model(
     theta: int,
     rho: float,
@@ -34,7 +34,7 @@ def gene_model(
     check_double_gene_gain=True,
     double_site_relocation=False,
     relocate_double_gene_gain=False,
-    core_genes=False,
+    ancestral_genes=False,
 ) -> tskit.TreeSequence:
     """
     Simulate a gene model with gain and loss mutations using msprime.
@@ -193,7 +193,7 @@ def gene_model(
     position = np.random.choice(position, poisson, replace=False)
     position.sort()
 
-    if not core_genes:
+    if not ancestral_genes:
         ancestral_state = [alleles[0]] * poisson
     else:
         ancestral_state = [alleles[1]] * poisson
