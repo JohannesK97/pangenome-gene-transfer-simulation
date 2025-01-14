@@ -336,27 +336,27 @@ class HGTMutationGenerator:
             )
             self.mutation_edge[int(site.position)][edge_with_mutation.child].append(mutation)
 
-    @profile
+    #@profile
     def find_ancestor_mutations(self, site, leaf_mut_node):
-        # Bestimme den linken Breakpoint des Site.
+        # Determine the left breakpoint of the site.
         k = bisect_right(self.breakpoints, int(site.position)) - 1
         bp = self.breakpoints[k]
         
-        # Initialisiere Ergebnisse und eine Queue für die Traversierung.
+        # Initialize results and a queue for traversal.
         parent_mutations = []
         nodes_to_process = deque([leaf_mut_node])
         
-        visited = set()  # Verhindert doppelte Verarbeitung von Knoten.
+        visited = set()  # Prevents duplicate processing of nodes.
     
         while nodes_to_process:
             child_node = nodes_to_process.popleft()
             
-            # Verarbeite den Knoten nur, wenn er noch nicht besucht wurde.
+            # Process the node only if it has not been visited yet.
             if child_node in visited:
                 continue
             visited.add(child_node)
             
-            # Wenn auf der Kante eine Mutation existiert, finde die früheste.
+            # If there is a mutation on the edge, find the earliest one.
             if self.mutation_edge[int(site.position)][child_node]:
                 earliest_mutation = min(
                     self.mutation_edge[int(site.position)][child_node], 
@@ -364,19 +364,21 @@ class HGTMutationGenerator:
                 )
                 parent_mutations.append(earliest_mutation)
                 
-                # Prüfe auf HGT-Ereignis und füge Elternknoten hinzu.
+                # Check for an HGT event and add parent nodes.
                 if len(self.node_to_parent[bp][child_node]) > 1:
-                    hgt_parents = [
+                    hgt_parent = min([
                         e.parent for e in self.node_to_parent[bp][child_node]
-                    ]
-                    nodes_to_process.extend(hgt_parents)
+                    ])
+                    #print("TWO PARENTS", hgt_parent, self.node_to_parent[bp][child_node])
+                    nodes_to_process.append(hgt_parent)
     
-            # Wenn keine Mutation existiert, füge Elternknoten hinzu.
+            # If there is no mutation, add parent nodes.
             else:
                 parent_nodes = [e.parent for e in self.node_to_parent[bp][child_node]]
                 nodes_to_process.extend(parent_nodes)
         
         return parent_mutations
+
 
     """
     def find_ancestor_mutations(self, site, leaf_mut_node):
@@ -413,7 +415,7 @@ class HGTMutationGenerator:
         return parent_mutations
     """     
 
-    @profile
+    #@profile
     def choose_alleles(self):
         
         for pos, site in self.sites.items():
@@ -451,7 +453,7 @@ class HGTMutationGenerator:
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
         return sorted(edges, key=lambda e: (tables.nodes[e.parent].time, e.child, e.left))
 
-    @profile
+    #@profile
     def generate(
         self,
         tables,
@@ -519,11 +521,13 @@ class HGTMutationGenerator:
             
         self.populate_tables(tables)
 
+        """
         edges = self.rectify_hgt_edges(tables, edges)
         tables.edges.clear()
 
         for e in edges:
             tables.edges.add_row(left=e.left, right=e.right, parent=e.parent, child=e.child)
+        """
         ts = tables.tree_sequence()
         return ts
 

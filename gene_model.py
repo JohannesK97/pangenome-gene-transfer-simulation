@@ -18,7 +18,7 @@ from gfs import gfs_from_matrix
 
 alleles = ["absent", "present"]
 
-@profile
+#@profile
 def gene_model(
     theta: int,
     rho: float,

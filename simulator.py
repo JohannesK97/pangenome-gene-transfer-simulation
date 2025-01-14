@@ -11,14 +11,13 @@ import h5py
 from concurrent.futures import ProcessPoolExecutor
 import queue
 import os
+import re
 
 import torch
 from sbi.utils import BoxUniform
 
 # Nur für Laufzeitanalyse:
 import cProfile
-import pstats
-import sys
 import time
 
 # Given: rho, theta, hgt_rate, ce_from_nwk
@@ -111,9 +110,9 @@ def simulator(
     if number_of_gains > num_sites/2:
         print("WARNING: infinite_sites_factor too small for big theta. Increase infinite_sites_factor")
         
-    while (number_of_gains > num_sites):
-        print("WARNING: infinite_sites_factor too small for big theta")
-        number_of_gains = np.random.poisson(lam=tree_lengths_average*theta)
+    if number_of_gains > num_sites:
+        print("WARNING: infinite_sites_factor too small for big theta!!!!!!!")
+        number_of_gains = num_sites
     
     # Make sure all lengths are positive
     if np.any(tree_lengths <= 0):
@@ -157,7 +156,7 @@ def simulator(
     end_time = time.time()
     elapsed_time = end_time - start_time
     
-    #print(f"Success: hgt_rate = {hgt_rate}, Total computation time = {elapsed_time:.6f} seconds.")
+    print(f"Success: hgt_rate = {hgt_rate}, Total computation time = {elapsed_time:.6f} seconds.")
 
     return gene_absence_presence_matrix
     #return mts
@@ -188,7 +187,8 @@ def read_simulation_results(file_path):
                 
                 # Kombiniere und formatiere die Array-Zeilen
                 array_text = " ".join(array_lines)
-                array_text = array_text.replace(' ', ',').replace(',,', ',')  # Leerzeichen durch Kommas ersetzen
+                #array_text = array_text.replace(' ', ',').replace(',,', ',')  # Leerzeichen durch Kommas ersetzen
+                array_text = re.sub(r'[ ,]+', ',', array_text.strip())
                 array_text = array_text.replace("[,", "[").replace(",]", "]")  # Korrekt formatieren
                 
                 # Konvertiere in ein Numpy-Array
@@ -228,8 +228,9 @@ def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samp
         )
 
     ce_from_nwk = core_tree.first().newick()
+
     """
-    with ProcessPoolExecutor(max_workers=8) as executor:
+    with ProcessPoolExecutor(max_workers=5) as executor:
         futures = []
         for idx in range(num_simulations):
             hgt_rate = hgt_rates[idx].item()
@@ -239,56 +240,32 @@ def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samp
         for future in futures:
             future.result()  # blockiert bis die Aufgabe abgeschlossen ist
     """
-    hgt_rate = hgt_rates[0].item()
     hgt_rate = 0.5
     simulate_and_store(theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file)
-            
-def profile_function():
-    """Profiling-Funktion, um your_function zu analysieren."""
-    profiler = cProfile.Profile()
-    profiler.enable()
-    run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
-    profiler.disable()
 
-    # Ergebnisse speichern
-    profiler.dump_stats("runtime.prof")
-    print("Profiling abgeschlossen. Ergebnisse in 'runtime.prof' gespeichert.")
 
-    # Ergebnisse anzeigen
-    with open("profile_results.txt", "w") as f:
-        stats = pstats.Stats(profiler, stream=f)
-        stats.sort_stats('cumulative')  # Sortieren nach kumulierter Zeit
-        stats.print_stats()
-
-    
 if __name__ == '__main__':
     
     num_simulations = 1
     
-    hgt_rate_max = 0.1 # Maximum hgt rate
+    hgt_rate_max = 1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
     theta = 100
     rho = 0.3
     num_samples = 20
 
-    runtime_analysis = True
-    
     prior = BoxUniform(low=hgt_rate_min * torch.ones(1), high=hgt_rate_max * torch.ones(1))
-
+    
     hgt_rates = prior.sample((num_simulations,))
+    #hgt_rates = torch.linspace(hgt_rate_min, hgt_rate_max, num_simulations)
     
     output_file = 'simulation_results.txt'
 
     if os.path.exists(output_file):
         os.remove(output_file)
 
-    if runtime_analysis:
-        print("Profiling-Modus aktiviert...")
-        profile_function()
-    else:
-        print("Normaler Ausführungsmodus...")
-        run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
+    run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples)
         
 
 
