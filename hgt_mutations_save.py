@@ -274,17 +274,6 @@ class HGTMutationGenerator:
                     new=True,
                     metadata=self.bin_sentinel_mask.to_bytes(1),
                 )
-                mutation = Mutation(
-                    node=leaf,
-                    derived_state="absent",
-                    parent=None,
-                    metadata=self.bin_sentinel_mask.to_bytes(1),
-                    time=0.00000000001,
-                    new=True,
-                    id=tskit.NULL,
-                )
-                self.mutation_edge[int(site.position)][leaf].append(mutation)
-
             k = bisect_right(self.breakpoints, pos) - 1
             site.add_mutation(
                 #node=root_node,
@@ -427,7 +416,7 @@ class HGTMutationGenerator:
     """     
 
     #@profile
-    def choose_alleles_old(self):
+    def choose_alleles(self):
         
         for pos, site in self.sites.items():
             if site.new:
@@ -459,81 +448,6 @@ class HGTMutationGenerator:
                         leaf_mut.parent = min(parent_muts, key=lambda m: m.time)
                         leaf_mut.derived_state = "absent"
 
-    #@profile
-    def choose_alleles(self):
-
-        for pos, site in self.sites.items():
-            if site.new:
-                site.ancestral_state = self.model.root_allele(self.rng)
-            # sort mutations by (increasing id if both are not null,
-            #  decreasing time, increasing insertion order)
-            site.mutations.sort(key=functools.cmp_to_key(cmp_mutation))
-    
-            site.mutations.sort(key=lambda mutation: mutation.time, reverse=True)   # CHANGE!!
-    
-            k = bisect_right(self.breakpoints, pos) - 1
-
-            self.bottom_mut = {}
-
-            
-            for mutation in site.mutations: 
-                # Following is only true for one mutation per site:
-                if mutation.derived_state == "present":
-                    if mutation.node in self.leaf_node_ids: # Mutation directly above a leaf.
-                        if mutation.time == sorted(self.mutation_edge[int(site.position)][mutation.node], key=lambda m: m.time)[1].time:
-                            child_mutations = [mutation.node]
-                        else:
-                            child_mutations = []
-                    else: # Mutation not directly above a leaf.
-                        if mutation.time == min(self.mutation_edge[int(site.position)][mutation.node], key=lambda m: m.time).time:
-                            child_mutations = self.find_child_mutations(site, mutation.node)  
-                        else:
-                            child_mutations = []
-
-            
-            for leaf_mut in site.mutations:
-                if (leaf_mut.time == 0.00000000001 and leaf_mut.metadata == self.bin_sentinel_mask.to_bytes(1)): # Sentinel mutations on the leaves
-                    if leaf_mut.node in child_mutations:
-                        leaf_mut.derived_state = "present"
-                    else:
-                        leaf_mut.derived_state = "absent"
-
-    #@profile
-    def find_child_mutations(self, site, mutation_node):
-        # Determine the left breakpoint of the site.
-        k = bisect_right(self.breakpoints, int(site.position)) - 1
-        bp = self.breakpoints[k]
-        
-        # Initialize results and a queue for traversal.
-        child_mutations = []
-        nodes_to_process = deque([mutation_node])
-        
-        visited = set()  # Prevents duplicate processing of nodes.
-
-        while nodes_to_process:
-            child_node = nodes_to_process.popleft()
-            
-            # Process the node only if it has not been visited yet.
-            if child_node in visited:
-                continue
-            visited.add(child_node)
-
-            # If there is a mutation on the edge, find the earliest one.
-            if self.mutation_edge[int(site.position)][child_node] and child_node is not mutation_node:
-                earliest_mutation = max(
-                    self.mutation_edge[int(site.position)][child_node], 
-                    key=lambda m: m.time
-                )
-                if earliest_mutation.time == 0.00000000001:
-                    child_mutations.append(earliest_mutation.node)
-    
-            # If there is no mutation, add parent nodes.
-            else:
-                #parent_nodes = [e.child for e in self.node_to_children[bp][child_node]]
-                parent_nodes = [e.child for e in self.node_to_children[(bp, child_node)]]
-                nodes_to_process.extend(parent_nodes)
-        
-        return child_mutations
 
     def rectify_hgt_edges(self, tables, edges):
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
@@ -552,99 +466,40 @@ class HGTMutationGenerator:
         keep=False,
         discrete_genome=False,
     ):
-
-        print(edges)
-
+        
         bp_left, bp_right = zip(*((int(e.left), int(e.right)) for e in edges))
         
         self.rho = rho
         
-        #self.breakpoints = sorted(list(set(bp_left + bp_right)))
-        self.breakpoints = np.unique(np.concatenate((bp_left, bp_right)))
+        self.breakpoints = sorted(list(set(bp_left + bp_right)))
         self.site_edges = [[] for _ in range(number_of_sites+1)]
         self.site_edges_lengths = [[] for _ in range(number_of_sites+1)]
         self.site_edges_total_lengths = [[] for _ in range(number_of_sites+1)]
         self.node_times = tables.nodes.time
-        self.mutation_edge = [defaultdict(list) for _ in range(number_of_sites+1)]
+        self.mutation_edge = [[] for _ in range(number_of_sites+1)]
         self.root_nodes = [None for _ in range(number_of_sites+1)]
-        self.node_to_parent = [defaultdict(list) for _ in range(number_of_sites+1)]
-        self.node_to_children = [defaultdict(list) for _ in range(number_of_sites+1)]
-
-        """
-        breakpoints = [[] for _ in range(number_of_sites+1)]
-        for left in range(number_of_sites+1):
-            breakpoints[left] = [self.breakpoints[bisect_left(self.breakpoints, left):(bisect_right(self.breakpoints, right)-1)] for right in range(number_of_sites+1)]
-        """
-        breakpoints_set = set(self.breakpoints)
-        breakpoints = self.breakpoints
-
-        self.node_to_children = defaultdict(list)
+        self.node_to_parent = [[] for _ in range(number_of_sites+1)]
         
         for e in edges:
-            time_diff = self.node_times[e.parent] - self.node_times[e.child]
-            #for site_breakpoint in breakpoints[bisect_left(breakpoints, e.left):(bisect_right(breakpoints, e.right)-1)]:
-            #for site_breakpoint in breakpoints[int(e.left)][int(e.right)]:
-            for site_breakpoint in range(int(e.left), int(e.right)):
-                if site_breakpoint in breakpoints_set:
-                    self.site_edges[site_breakpoint].append(e)
-                    self.site_edges_lengths[site_breakpoint].append(time_diff)
-                    #self.node_to_children[site_breakpoint][e.parent].append(e)
-                    self.node_to_children[(site_breakpoint, e.parent)].append(e)
+            for site_breakpoint in self.breakpoints[bisect_left(self.breakpoints, e.left):(bisect_right(self.breakpoints, e.right)-1)]:
+                self.site_edges[site_breakpoint].append(e)
+                self.site_edges_lengths[site_breakpoint].append(self.node_times[e.parent]-self.node_times[e.child])
+              
+        self.edges_lengths = np.array([(self.node_times[e.parent]-self.node_times[e.child])*(e.right-e.left) for e in edges], dtype=np.float64)
 
-        self.edges_lengths = np.array([(self.node_times[e.parent]-self.node_times[e.child])*(e.right-e.left) for e in edges])
-                                      
         for pos in range(number_of_sites+1):
             k = bisect_right(self.breakpoints, pos) - 1
             self.site_edges_total_lengths[pos] = np.array(self.site_edges_lengths[self.breakpoints[k]]).sum()
-            
-        
-        #for bp_idx, bp in zip(self.breakpoints, self.breakpoints[1:]):
-        for bp in self.breakpoints[:-1]:
-            temp_edges = self.site_edges[bp]
-            #for edge in temp_edges:
-            #    self.node_to_children[bp][edge.parent].append(edge)
-        
-            self.root_nodes[bp] = max(edge.parent for edge in temp_edges)
+            self.mutation_edge[pos]=defaultdict(list)
 
-        """
-        self.rho = rho
         
-        bp_left, bp_right = zip(*((int(e.left), int(e.right)) for e in edges))
-        self.breakpoints = np.unique(np.concatenate((bp_left, bp_right)))
-        self.site_edges = [[] for _ in range(number_of_sites)]
-        self.site_edges_lengths = [[] for _ in range(number_of_sites)]
-        self.site_edges_total_lengths = np.zeros(range(number_of_sites), dtype=np.float64)
-        self.node_times = tables.nodes.time
-        self.mutation_edge = [defaultdict(list) for _ in range(number_of_sites)]
-        self.root_nodes = [None for _ in range(number_of_sites)]
-        self.node_to_parent = [defaultdict(list) for _ in range(number_of_sites)]
-        self.node_to_children = [defaultdict(list) for _ in range(number_of_sites)]
+        for bp in zip(self.breakpoints, self.breakpoints[1:]): # Neigboring sites with the same tree are treated together.
+            self.node_to_parent[bp[0]] = defaultdict(list)
+            for edge in self.site_edges[bp[0]]:
+                self.node_to_parent[bp[0]][edge.child].append(edge)
 
-        print(self.breakpoints)
-        # Breakpoints den Edges zuordnen
-        for e in edges:
-            start = np.searchsorted(self.breakpoints, e.left, side='left')
-            end = np.searchsorted(self.breakpoints, e.right, side='right') - 1
-            edge_length = self.node_times[e.parent] - self.node_times[e.child]
-        
-            for i in range(start, end):
-                self.site_edges[i].append(e)
-                self.site_edges_lengths[i].append(edge_length)
-        
-        # Total Lengths berechnen
-        for i in range(len(self.breakpoints)):
-            self.site_edges_total_lengths[i] = sum(self.site_edges_lengths[i])
-        
-        # Parent/Children Beziehungen aufbauen
-        for bp_idx, bp in enumerate(zip(self.breakpoints, self.breakpoints[1:])):
-            edges = self.site_edges[bp_idx]
-            for edge in edges:
-                self.node_to_children[bp_idx][edge.parent].append(edge)
-        
-            self.root_nodes[bp_idx] = max(edge.parent for edge in edges)
+            self.root_nodes[bp[0]] = max([e.parent for e in self.site_edges[bp[0]]])
 
-        self.edges_lengths = np.array([(self.node_times[e.parent]-self.node_times[e.child])*(e.right-e.left) for e in edges], dtype=np.float64)
-        """
         
         self.rng = _msprime.RandomGenerator(seed)
         if keep:
