@@ -251,7 +251,7 @@ if __name__ == '__main__':
     hgt_rate_max = 1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
-    theta = 100
+    theta = 1000
     rho = 0.3
     num_samples = 20
 

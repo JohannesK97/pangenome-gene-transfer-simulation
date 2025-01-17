@@ -539,7 +539,7 @@ class HGTMutationGenerator:
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
         return sorted(edges, key=lambda e: (tables.nodes[e.parent].time, e.child, e.left))
 
-    #@profile
+    @profile
     def generate(
         self,
         tables,
@@ -552,8 +552,6 @@ class HGTMutationGenerator:
         keep=False,
         discrete_genome=False,
     ):
-
-        print(edges)
 
         bp_left, bp_right = zip(*((int(e.left), int(e.right)) for e in edges))
         
