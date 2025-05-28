@@ -436,7 +436,7 @@ class HGTMutationGenerator:
             #  decreasing time, increasing insertion order)
             site.mutations.sort(key=functools.cmp_to_key(cmp_mutation))
     
-            site.mutations.sort(key=lambda mutation: mutation.time, reverse=True)   # CHANGE!!
+            site.mutations.sort(key=lambda mutation: mutation.time, reverse=True) 
     
             k = bisect_right(self.breakpoints, pos) - 1
 
@@ -539,7 +539,7 @@ class HGTMutationGenerator:
         edges = list(e for e in edges if not int.from_bytes(e.metadata) & self.bin_hgt_mask)
         return sorted(edges, key=lambda e: (tables.nodes[e.parent].time, e.child, e.left))
 
-    @profile
+    #@profile
     def generate(
         self,
         tables,

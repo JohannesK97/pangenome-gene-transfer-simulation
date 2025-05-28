@@ -7,7 +7,10 @@ import random
 import torch
 import os
 import time
+import re
+import secrets
 
+from random import randint
 from collections import namedtuple
 from collections import defaultdict
 from collections import deque
@@ -16,15 +19,16 @@ from sbi.utils import BoxUniform
 
 from concurrent.futures import ProcessPoolExecutor
 
-@profile
+#@profile
 def simulator(
+    num_samples: Union[int, None],
     theta: int = 1,
     rho: float = 0.3,
     hgt_rate: float = 0,
     num_sites: int = 100,
     ce_from_nwk: Union[str, None] = None,
-    num_samples: Union[int, None] = None,
     infinite_sites_factor: int = 3,
+    seed: Union[int, None] = None,
 ) -> tskit.TreeSequence:
 
     start_time = time.time()
@@ -49,11 +53,18 @@ def simulator(
                 recombination_rate=0,
                 gene_conversion_rate=0,
                 gene_conversion_tract_length=1,  # One gene
+                random_seed=seed,
             )
     
         ce_from_nwk = core_tree.first().newick()
 
+    if seed is None:
+        seed = secrets.randbelow(2**32 - 4) + 2
 
+    random.seed(seed)
+    np.random.seed(seed)
+    print("Seed: ", seed)
+    
     ### Calculate hgt events:
 
     args = hgt_sim_args.Args(
@@ -64,7 +75,8 @@ def simulator(
         hgt_rate=hgt_rate,
         ce_from_ts=None,
         ce_from_nwk=ce_from_nwk,
-        random_seed=1
+        random_seed=seed,
+        #random_seed=84,
     )
 
     ts, hgt_edges = hgt_simulation.run_simulate(args)
@@ -75,54 +87,61 @@ def simulator(
     alleles = ["absent", "present"]
     
     # Place one mutation per site, e.g. genome position
+
+    gains_model = msprime.MatrixMutationModel(
+        alleles = alleles,
+        root_distribution=[1, 0],
+        transition_matrix=[
+            [0, 1],
+            [0, 1],
+        ],
+    )
     
-    tables = ts.dump_tables()
+    ts_gains = msprime.sim_mutations(ts, rate=1, model = gains_model, keep = True, random_seed=seed)
+
+    k = 1
+    while (ts_gains.num_sites < ts_gains.sequence_length):
+        ts_gains = msprime.sim_mutations(ts_gains, rate=1, model = gains_model, keep = True, random_seed=seed+k)
+        k = k+1
+
+    # Remove superfluous mutations
     
-    Mutation = namedtuple("Mutation", ["node", "time"])
+    tables = ts_gains.dump_tables()
     
-    present_mutations = {}
+    mutations_by_site = {}
+    for mut in tables.mutations:
+        if mut.site not in mutations_by_site:
+            mutations_by_site[mut.site] = []
+        mutations_by_site[mut.site].append(mut)
     
-    site = 0
-    for tree in ts.trees():
-        
-        nodes = [n for n in tree.nodes()]
-        probabilities = np.array([tree.branch_length(n) for n in nodes]) / tree.total_branch_length
-        
-        for i in range(int(tree.span)):
+    tables.mutations.clear()
     
-            mutation_node = np.random.choice(nodes, size=1, p=probabilities)[0]
+    for site, mutations in mutations_by_site.items():
+        selected_mutation = random.choice(mutations)
+
+        tables.mutations.add_row(
+            site=selected_mutation.site,
+            node=selected_mutation.node,
+            derived_state=selected_mutation.derived_state,
+            parent=-1,
+            metadata=None,
+            time=selected_mutation.time,
+        )
+
+        # Add sentinel mutations at the leafs:
     
-            mutation_time = random.uniform(tree.time(mutation_node), tree.time(tree.parent(mutation_node)))
-            
+        for leaf_position in range(num_samples):
             tables.mutations.add_row(
-                site = site,
-                node = mutation_node,
-                derived_state = "present",
-                #parent=parent_id,
-                #metadata=mutation.metadata,
-                time=mutation_time,
+                site = selected_mutation.site,
+                node = leaf_position,
+                derived_state = "absent",
+                time = 0.00000000001,
             )
-            
-            tables.sites.add_row(position=site, ancestral_state="absent")
-    
-            present_mutations[site] = Mutation(node=mutation_node, time=mutation_time)
-    
-            # Add sentinel mutations at the leafs:
-    
-            for leaf_position in range(num_samples):
-                tables.mutations.add_row(
-                    site = site,
-                    node = leaf_position,
-                    derived_state = "absent",
-                    time = 0.00000000001,
-                )
-        
-            site += 1
-    
+
     ts_gains = tables.tree_sequence()
-    
+
+
     # Place losses:
-    rho = 0.3
     
     losses_model = msprime.MatrixMutationModel(
         alleles = alleles,
@@ -133,7 +152,28 @@ def simulator(
         ],
     )
     
-    ts_gains_losses = msprime.sim_mutations(ts_gains, rate=rho, model = losses_model, keep = True)
+    ts_gains_losses = msprime.sim_mutations(ts_gains, rate = rho, model = losses_model, keep = True, random_seed=seed-1)
+    
+    tables = ts_gains_losses.dump_tables()
+    
+    # Find the node of the root of the clonal tree:
+    clonal_node = ts_gains.first().mrca(*list(range(num_samples)))
+
+    print("Clonal node:", clonal_node)
+    
+    for site, mutations in mutations_by_site.items():
+        # Mutation at clonal root:
+        tables.mutations.add_row(
+            site=site,
+            node=clonal_node,
+            derived_state="absent",
+            parent=-1,
+            metadata=None,
+            time=tables.nodes.time[clonal_node],
+        )
+    
+    tables.sort()
+    ts_gains_losses = tables.tree_sequence()
 
 
     ### Calculate the gene absence presence matrix:
@@ -141,16 +181,18 @@ def simulator(
     MutationRecord = namedtuple('MutationRecord', ['site_id', 'mutation_id', 'node', 'is_hgt'])
     
     tables = ts_gains_losses.dump_tables()
+
+    tables.mutations.clear() # SIMPLE VERSION!
     
-    hgt_parent_nodes = [edge.parent-1 for edge in hgt_edges]
+    hgt_parent_nodes = [edge.parent-1 for edge in hgt_edges] # -1 is due to 2 nodes being put in the model for a parent of HGT event.
     hgt_parent_children = defaultdict(list)
         
     for parent in hgt_parent_nodes:
         hgt_parent_children[parent].append(parent-1)
             
-    for tree in ts_gains_losses.trees():
+    for tree in ts_gains_losses.trees(): # Select the tree of a specific gene
         
-        for site in tree.sites():
+        for site in tree.sites(): # There is only one site
             mutations = site.mutations
             present_mutation = [m for m in mutations if m.derived_state == "present"][0]
             absent_mutations = [m for m in mutations if m.derived_state == "absent"]
@@ -220,15 +262,49 @@ def simulator(
                             nodes_to_process.extend([(hgt_parent_children[child_node[0]][0], True, True)])
     
             child_mutations.sort(key=lambda mut: not mut.is_hgt) # Will set is_hgt to False later if there are paths without hgt events to the leaf.
-    
-            for mutation in child_mutations:
-    
-                tables.mutations[mutation.mutation_id] = tables.mutations[mutation.mutation_id].replace(derived_state = "present")
-                tables.mutations[mutation.mutation_id] = tables.mutations[mutation.mutation_id].replace(metadata = bytes([mutation.is_hgt]))
-    
-        
-    mts = tables.tree_sequence()
 
+            # We have to adress multiple paths to the same destiny, some with hgt and other without it:
+            unique_mutations = {}
+    
+            for mut in child_mutations:
+                if mut.node not in unique_mutations:
+                    unique_mutations[mut.node] = mut
+                else:
+                    existing_mut = unique_mutations[mut.node]
+                    if not existing_mut.is_hgt or not mut.is_hgt:
+                        unique_mutations[mut.node] = mut._replace(is_hgt=False)
+            
+            child_mutations_filtered = list(unique_mutations.values())
+
+            for mutation in mutations:
+                if mutation.time > 0.00000000001:
+                    if mutation.derived_state == "absent":
+                        metadata_value = bytes([3]) 
+                    elif mutation.derived_state == "present":
+                        metadata_value = bytes([7])
+                    tables.mutations.add_row(
+                        site=site.id,
+                        node=mutation.node,
+                        derived_state=mutation.derived_state,
+                        parent=-1,
+                        metadata=metadata_value,
+                        time=mutation.time,
+                    )
+            
+            for mutation in child_mutations_filtered:
+    
+                #tables.mutations[mutation.mutation_id] = tables.mutations[mutation.mutation_id].replace(derived_state = "present", metadata = bytes([mutation.is_hgt]))
+
+                tables.mutations.add_row(
+                    site=site.id,
+                    node=mutation.node,
+                    derived_state="present",
+                    parent=-1,
+                    metadata=bytes([mutation.is_hgt]),
+                    time=0.00000000001,
+                )
+
+    mts = tables.tree_sequence()
 
     ### Print the computation time.
     
@@ -244,6 +320,7 @@ def simulator(
 def read_simulation_results(file_path):
     hgt_rates = []
     results = []
+    hgt_counts = []  # Liste für die erste Spalte
 
     with open(file_path, 'r') as f:
         lines = f.readlines()
@@ -266,12 +343,18 @@ def read_simulation_results(file_path):
                 
                 # Kombiniere und formatiere die Array-Zeilen
                 array_text = " ".join(array_lines)
-                #array_text = array_text.replace(' ', ',').replace(',,', ',')  # Leerzeichen durch Kommas ersetzen
                 array_text = re.sub(r'[ ,]+', ',', array_text.strip())
                 array_text = array_text.replace("[,", "[").replace(",]", "]")  # Korrekt formatieren
                 
                 # Konvertiere in ein Numpy-Array
                 result = np.array(eval(array_text))
+                
+                # Speichere die erste Spalte und entferne sie aus result
+                if result.ndim > 1 and result.shape[1] > 1:
+                    hgt_counts.append(result[:, 0])  # Erste Spalte speichern
+                    result = result[:, 1:]  # Erste Spalte entfernen
+                else:
+                    hgt_counts.append(result)  # Falls nur eine Spalte existiert
                 
                 # Ergebnisse speichern
                 hgt_rates.append(hgt_rate)
@@ -281,10 +364,11 @@ def read_simulation_results(file_path):
         else:
             i += 1
 
-    return hgt_rates, results
+    return hgt_rates, results, hgt_counts
 
 
-@profile
+
+#@profile
 def simulate_and_store(theta, rho, num_samples, num_sites, hgt_rate, ce_from_nwk, output_file):
     
     mts = simulator(theta = theta, rho = rho, num_samples = num_samples, num_sites = num_sites, hgt_rate = hgt_rate, ce_from_nwk = ce_from_nwk)
@@ -294,13 +378,27 @@ def simulate_and_store(theta, rho, num_samples, num_sites, hgt_rate, ce_from_nwk
     for var in mts.variants():
         gene_absence_presence_matrix.append(var.genotypes)
     gene_absence_presence_matrix = np.array(gene_absence_presence_matrix)
+
+    # Metadaten-Array extrahieren
+    metadata = np.array([int.from_bytes(m.metadata, "little") for m in mts.tables.mutations])
+    
+    # Sites extrahieren
+    sites = np.array(mts.tables.mutations.site)
+    
+    # Für jede Site zählen, wie oft metadata == 1 ist
+    unique_sites = np.unique(sites)
+    counts = np.array([np.sum(metadata[sites == site] == 1) for site in unique_sites])
+    counts = counts.reshape(-1, 1)  # Umwandlung in Spaltenvektor (N, 1)
+    
+    # Counts als erste Spalte hinzufügen
+    gene_absence_presence_matrix = np.hstack((counts, gene_absence_presence_matrix))
     
     np.set_printoptions(threshold=np.inf, linewidth=np.inf)
     
     with open(output_file, 'a') as f:
         f.write(f"hgt_rate {hgt_rate}: {gene_absence_presence_matrix}\n")
 
-@profile
+#@profile
 def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samples, num_sites):
 
     core_tree = msprime.sim_ancestry(
@@ -314,31 +412,31 @@ def run_simulation(num_simulations, output_file, theta, rho, hgt_rates, num_samp
 
     ce_from_nwk = core_tree.first().newick()
 
-    """
+
     with ProcessPoolExecutor(max_workers=5) as executor:
         futures = []
         for idx in range(num_simulations):
             hgt_rate = hgt_rates[idx].item()
-            futures.append(executor.submit(simulate_and_store, theta, rho, num_samples, hgt_rate, ce_from_nwk, output_file))
+            futures.append(executor.submit(simulate_and_store, theta, rho, num_samples, num_sites, hgt_rate, ce_from_nwk, output_file))
 
         # Warten auf alle Futures
         for future in futures:
             future.result()  # blockiert bis die Aufgabe abgeschlossen ist
-    """
-    hgt_rate = 0.5
-    simulate_and_store(theta, rho, num_samples, num_sites, hgt_rate, ce_from_nwk, output_file)
+
+    # hgt_rate = 0.5
+    # simulate_and_store(theta, rho, num_samples, num_sites, hgt_rate, ce_from_nwk, output_file)
 
 if __name__ == '__main__':
     
-    num_simulations = 1
+    num_simulations = 10000
     
     hgt_rate_max = 1 # Maximum hgt rate
     hgt_rate_min = 0 # Minimum hgt rate
     
     theta = 1000
-    rho = 0.3
-    num_samples = 20
-    num_sites = 2000
+    rho = 1
+    num_samples = 100
+    num_sites = 1000
 
     prior = BoxUniform(low=hgt_rate_min * torch.ones(1), high=hgt_rate_max * torch.ones(1))
     

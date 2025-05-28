@@ -2187,6 +2187,7 @@ class Simulator:
         assert alpha.prev is None
         self.P[alpha.population].add(alpha, label)
 
+    #@profile
     def create_hgt_segment(self, y, lbp, rbp, population_index=0):
         """
         Creates an alpha segment of length tl of segment with index i.
