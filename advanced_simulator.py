@@ -18,6 +18,9 @@ from typing import List, Union
 from sbi.utils import BoxUniform
 
 from concurrent.futures import ProcessPoolExecutor
+from sklearn.decomposition import PCA
+from scipy.spatial.distance import pdist, squareform
+
 
 #@profile
 def simulator(

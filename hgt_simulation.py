@@ -1507,7 +1507,6 @@ class Simulator:
             )
             X = {pop.id for pop in self.P if pop.get_num_ancestors() > 0}
             assert non_empty_pops == X
-        print(self.S)
 
     def single_sweep_simulate(self):
         """
