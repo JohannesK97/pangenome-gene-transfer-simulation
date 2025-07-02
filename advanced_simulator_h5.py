@@ -74,6 +74,9 @@ def simulator(
     if seed is None:
         seed = secrets.randbelow(2**32 - 4) + 2
 
+    if num_samples < multidimensional_scaling_dimensions:
+        multidimensional_scaling_dimensions = num_samples
+
     random.seed(seed)
     np.random.seed(seed)
     #print("Seed: ", seed)
@@ -691,7 +694,7 @@ def multidimensional_scaling(D, multidimensional_scaling_dimensions=100):
 def reconstruct_distance_matrix(coords, gene_absence_presence = None):
     if gene_absence_presence is None:
         return squareform(pdist(coords, metric="euclidean")) # For the core distance
-    else: 
+    else:
         output = squareform(pdist(coords, metric="euclidean")** 2) # For the allel distances. ** 2 transforms it into Hamming distances
         sample_not_present = (gene_absence_presence == 0)
         output[sample_not_present, : ] = -1
@@ -873,6 +876,7 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
         )
         ts, hgt_edges = hgt_simulation.run_simulate(args)
         distance_matrix_core = distance_core(tree_sequence = ts, num_samples = num_samples)
+        distance_matrix_core = multidimensional_scaling(distance_matrix_core, multidimensional_scaling_dimensions = multidimensional_scaling_dimensions)
     else:
         ce_from_nwk = None
         distance_matrix_core = None
@@ -892,7 +896,7 @@ if __name__ == '__main__':
     num_simulations = 35000
     same_core_tree = False
 
-    num_samples = 1000
+    num_samples = 100
     num_genes = 1
 
     ### Define random rates:
