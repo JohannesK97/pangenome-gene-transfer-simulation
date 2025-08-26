@@ -1335,10 +1335,10 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
             
 if __name__ == '__main__':
     
-    num_simulations = 1000
-    same_core_tree = False
+    num_simulations = 10000
+    same_core_tree = True
 
-    num_samples = 20
+    num_samples = 100
     num_genes = 1
 
     ### Define random rates:
