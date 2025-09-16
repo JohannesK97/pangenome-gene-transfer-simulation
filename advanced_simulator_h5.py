@@ -7,7 +7,6 @@ import networkx as nx
 import random
 import torch
 import os
-import time
 import re
 import secrets
 import copy
@@ -17,11 +16,13 @@ import uuid
 import glob
 import shutil
 import pickle
+import time
 
 from random import randint
 from collections import namedtuple
 from collections import defaultdict
 from collections import deque
+from dataclasses import dataclass
 from sbi.utils import BoxUniform
 from sklearn.decomposition import PCA
 from scipy.spatial.distance import pdist, squareform
@@ -31,6 +32,17 @@ from networkx.readwrite import json_graph
 
 from concurrent.futures import ProcessPoolExecutor
 
+
+
+@dataclass
+class HGTransfer:
+    recipient_parent_node: int
+    recipient_child_node: int
+    leaf: int
+    donor_parent_node: int
+    donor_child_node: int
+
+
 #@profile
 def simulator(
     num_samples: Union[int, None],
@@ -38,8 +50,8 @@ def simulator(
     rho: float = 0.3,
     hgt_rate: float = 0,
     num_genes: int = 1,
-    nucleotide_mutation_rate: float = 0.01,
-    gene_length: int = 10000,
+    nucleotide_mutation_rate: Union[float, None] = None,
+    gene_length: int = 1000,
     pca_dimensions: int = 10,
     ce_from_nwk: Union[str, None] = None,
     seed: Union[int, None] = None,
@@ -47,10 +59,11 @@ def simulator(
     multidimensional_scaling_dimensions: int = 100,
     block_clustering_threshold: Union[float, Sequence[float]] = np.arange(0, 1.0001, 0.025),
     clonal_root_mutation: Union[bool, None] = None,
+    hgt_difference_removal_threshold: float = 0,
 ) -> tskit.TreeSequence:
 
     start_time = time.time()
-    
+
     """
     if ce_from_nwk is not None and num_samples is not None:
         raise ValueError(
@@ -76,16 +89,21 @@ def simulator(
     
         ce_from_nwk = core_tree.first().newick()
 
-    if seed is None:
-        seed = secrets.randbelow(2**32 - 4) + 2
-
-    if num_samples < multidimensional_scaling_dimensions:
-        multidimensional_scaling_dimensions = num_samples
-
     random.seed(seed)
     np.random.seed(seed)
     #print("Seed: ", seed)
     
+    if seed is None:
+        seed = secrets.randbelow(2**32 - 4) + 2
+
+    if nucleotide_mutation_rate is None:
+        #nucleotide_mutation_rate = np.random.uniform(0.033, 0.066)
+        nucleotide_mutation_rate = 0.1
+
+    if num_samples < multidimensional_scaling_dimensions:
+        multidimensional_scaling_dimensions = num_samples
+
+
     ### Calculate hgt events:
 
     args = hgt_sim_args.Args(
@@ -106,7 +124,7 @@ def simulator(
     
     alleles = ["absent", "present"]
     
-    # Place one mutation per site, e.g. genome position
+    # Place one mutation per site, e.g. gen
     
     gains_model = msprime.MatrixMutationModel(
         alleles = alleles,
@@ -116,14 +134,47 @@ def simulator(
             [0, 1],
         ],
     )
+
+    k = 0
+    tables = ts.tables
+    ts_gains = tables.tree_sequence()
+    while True:
+        ts_gains = msprime.sim_mutations(ts_gains,rate=1,model=gains_model,keep=True,random_seed=seed+k,end_time=core_tree.node(core_tree.first().root).time)
+        
+        tables = ts_gains.dump_tables()
+        tables.mutations.clear()  
+        for tree in ts_gains.trees():
+            for site in tree.sites():
+                for mut in site.mutations:
+                    # Alle Blätter unterhalb des Mutations-Knotens holen
+                    leaf_nodes = list(tree.leaves(mut.node))
+        
+                    # Prüfen, ob eines der Blätter ein "echtes Sample" ist
+                    if any(leaf < num_samples for leaf in leaf_nodes):
+                        # Mutation behalten
+                        tables.mutations.add_row(
+                            site=mut.site,
+                            node=mut.node,
+                            derived_state=mut.derived_state,
+                            metadata=mut.metadata,
+                            time=mut.time
+                        )
+        
+        ts_gains = tables.tree_sequence()
+
+        # Prüfen: jede Site mindestens eine Mutation?
+        all_sites_ok = True
+        for site_id in range(num_genes):
+            site_mutations = [m for m in ts_gains.tables.mutations if m.site == site_id]
+            if len(site_mutations) == 0:
+                all_sites_ok = False
+                break
+        
+        if all_sites_ok:
+            break 
     
-    ts_gains = msprime.sim_mutations(ts, rate=1, model = gains_model, keep = True, random_seed=seed)
-    
-    k = 1
-    while (ts_gains.num_sites < ts_gains.sequence_length):
-        ts_gains = msprime.sim_mutations(ts_gains, rate=1, model = gains_model, keep = True, random_seed=seed+k)
-        k = k+1
-    
+        k += 1
+
     # Remove superfluous mutations
     
     tables = ts_gains.dump_tables()
@@ -142,7 +193,8 @@ def simulator(
 
     if clonal_root_mutation == None:
         clonal_root_mutation = random.random() < 0.5
-    
+
+    present_mutations = [[] for i in range(num_genes)]
     for site, mutations in mutations_by_site.items():
 
         if clonal_root_mutation == True:
@@ -165,6 +217,7 @@ def simulator(
                 metadata=None,
                 time=selected_mutation.time,
             )
+            present_mutations[site].append(selected_mutation)
 
             # Mutation at clonal root:
             tables.mutations.add_row(
@@ -202,35 +255,14 @@ def simulator(
     )
     
     ts_gains_losses = msprime.sim_mutations(ts_gains, rate = rho, model = losses_model, keep = True, random_seed=seed-1)
-    """
-    tables = ts_gains_losses.dump_tables()
-    
-    # Find the node of the root of the clonal tree:
-    clonal_root_node = ts_gains.first().mrca(*list(range(num_samples)))
-    
-    print("Clonal node:", clonal_root_node)
-    
-    for site, mutations in mutations_by_site.items():
-        # Mutation at clonal root:
-        tables.mutations.add_row(
-            site=site,
-            node=clonal_root_node,
-            derived_state="absent",
-            parent=-1,
-            metadata=None,
-            time=tables.nodes.time[clonal_root_node],
-        )
-    
-    tables.sort()
-    ts_gains_losses = tables.tree_sequence()
-    """
+
     ### Calculate the gene absence presence matrix:
     
     MutationRecord = namedtuple('MutationRecord', ['site_id', 'mutation_id', 'node', 'is_hgt'])
     
     tables = ts_gains_losses.dump_tables()
     
-    tables.mutations.clear() # SIMPLE VERSION!
+    tables.mutations.clear()
     
     hgt_parent_nodes = [edge.parent-1 for edge in hgt_edges]
     hgt_children_nodes = [edge.child for edge in hgt_edges]
@@ -260,7 +292,7 @@ def simulator(
     gene_number_loss_events = [0 for _ in range(num_genes)]
     gene_nodes_loss_events = [[] for _ in range(num_genes)]
     gene_trees_list = []
-    
+    hgt_parent_children_passed_list = []
     
     for tree in ts_gains_losses.trees():
 
@@ -268,8 +300,7 @@ def simulator(
             
             hgt_parent_children_passed = [False] * ts_gains_losses.num_nodes
             mutations = site.mutations
-            #site = list(tree.sites())[0]
-            
+
             present_mutation = [m for m in mutations if m.derived_state == "present"][0]
             absent_mutation_nodes = {m.node for m in mutations if m.derived_state == "absent"}
 
@@ -364,7 +395,8 @@ def simulator(
                                 selected_branch_nodes_to_process.extendleft([(hgt_parent_children[child_node[0]][0], True, True, child_node[3] + 1)])
                                 hgt_parent_children_passed[hgt_parent_children[child_node[0]][0]] = True # The child of the hgt_edge is marked
                                 #print("HGT at Node: ", hgt_parent_children[child_node[0]][0])
-        
+
+                hgt_parent_children_passed_list.append(hgt_parent_children_passed)
                 # Second time going through:
                 
                 branching_nodes_to_process = deque([(present_mutation.node, False, False, 0)])
@@ -449,10 +481,6 @@ def simulator(
                             if hgt_parent_children[child_node[0]]:
                                 selected_branch_nodes_to_process.extendleft([(hgt_parent_children[child_node[0]][0], True, True, child_node[3] + 1)])
 
-            #print("Tree computed")
-            #for i in range(len(branching_nodes_reached_before)):
-            #    if branching_nodes_reached_before[i]:
-            #        print("Node branched before: ", i)
             child_mutations.sort(key=lambda mut: not mut.is_hgt) # Will set is_hgt to False later if there are paths without hgt events to the leaf.
         
             # We have to adress multiple paths to the same destiny, some with hgt and other without it:
@@ -496,7 +524,158 @@ def simulator(
         
 
     mts = tables.tree_sequence()
+
+    for i in range(num_genes): 
+
+        tables_gene_list[i].sort()
+        
+        gene_trees_list.append(tables_gene_list[i].tree_sequence())
+
+    ### Compute the gene presence and absence:
     
+    gene_absence_presence_matrix = []
+    
+    for var in mts.variants():
+        gene_absence_presence_matrix.append(var.genotypes)
+    gene_absence_presence_matrix = np.array(gene_absence_presence_matrix)
+
+    print("Number of present genes: ", sum(gene_absence_presence_matrix[0]))
+    
+    fitch_scores = fitch_parsimony_score(mts, gene_absence_presence_matrix)
+
+    ### Calculate the HGT events:
+
+    gene_number_hgt_events_passed = [0 for _ in range(num_genes)]
+    nodes_hgt_events = [[] for _ in range(num_genes)]
+    hgt_trees = [[] for _ in range(num_genes)]
+    
+    for tree in mts.trees():
+        for site in tree.sites():
+            reached_nodes_from_leaves = defaultdict(list)
+            for node_id in range(mts.num_nodes):
+                reached_nodes_from_leaves[node_id] = False
+            
+            stack = []
+            for node_id in range(mts.num_samples):
+                if gene_absence_presence_matrix[site.id][node_id]:
+                    stack.append((node_id, node_id))
+                    
+            while stack:
+                node, leaf_node = stack.pop()
+                parent = tree.parent(node)
+                if not hgt_parent_children_passed[node] and not reached_nodes_from_leaves[node] and node < clonal_root_node:
+                    stack.append((parent, leaf_node))
+                    reached_nodes_from_leaves[node] = True
+                elif hgt_parent_children_passed[node] and not reached_nodes_from_leaves[node] and node < clonal_root_node:
+                    #print("HGT event spotted at node: ", node)
+                    nodes_hgt_events[site.id].append((node, leaf_node, None))
+                    gene_number_hgt_events_passed[site.id] += 1
+                    reached_nodes_from_leaves[node] = True
+    
+            tables = gene_trees_list[site.id].tables
+            for subtree in gene_trees_list[site.id].trees():
+                hgt_events_with_origins = []
+                for node, leaf_node, _ in nodes_hgt_events[site.id]:
+                    temp_time = 0
+                    parent = leaf_node
+                    time_of_node = gene_trees_list[site.id].node(node).time
+                    while temp_time < time_of_node:
+                        child = parent
+                        parent = subtree.parent(parent)
+                        temp_time = gene_trees_list[site.id].node(parent).time
+    
+                    mask = [
+                        not (edge.parent == parent and edge.child == child)
+                        for edge in tables.edges
+                    ]
+                    
+                    tables.edges.set_columns(
+                        left=[e.left for i, e in enumerate(tables.edges) if mask[i]],
+                        right=[e.right for i, e in enumerate(tables.edges) if mask[i]],
+                        parent=[e.parent for i, e in enumerate(tables.edges) if mask[i]],
+                        child=[e.child for i, e in enumerate(tables.edges) if mask[i]],
+                    )
+                    
+                    tables.edges.add_row(left = 0, right = gene_length, parent=node, child=child)
+                    tables.edges.add_row(left = 0, right = gene_length, parent=parent, child=node)
+
+                    """
+                    # Find correct HGT origin:
+                    hgt_origin = parent
+                    while True:
+                        child1, child2 = tuple(subtree.children(hgt_origin))
+                        child1_leaves = [leaf for leaf in subtree.leaves(child1) if leaf < num_samples]
+                        child2_leaves = [leaf for leaf in subtree.leaves(child2) if leaf < num_samples]
+                    
+                        if (len(child1_leaves) > 0 and len(child2_leaves) > 0   and child1_leaves != child2_leaves):
+                            break
+                        else:
+                            hgt_origin = subtree.parent(hgt_origin)
+
+
+                    hgt_events_with_origins.append((node, leaf_node, hgt_origin))
+                    """
+                    hgt_events_with_origins.append((node, leaf_node, parent))
+                    
+                nodes_hgt_events[site.id] = hgt_events_with_origins
+
+            tables.sort()
+            gene_trees_list[site.id] = tables.tree_sequence()
+    
+            valid_nodes_hgt_events = []
+            for subtree in gene_trees_list[site.id].trees():
+                for node, leaf_node, hgt_origin in nodes_hgt_events[site.id]:
+    
+                    tables = mts.tables
+                    
+                    temp_time = 0
+                    parent = leaf_node
+                    time_of_node = gene_trees_list[site.id].node(node).time
+    
+                    mask = [
+                        not (edge.parent == tree.parent(node) and edge.child == node)
+                        for edge in tables.edges
+                    ]
+    
+                    tables.edges.set_columns(
+                        left=[e.left for i, e in enumerate(tables.edges) if mask[i]],
+                        right=[e.right for i, e in enumerate(tables.edges) if mask[i]],
+                        parent=[e.parent for i, e in enumerate(tables.edges) if mask[i]],
+                        child=[e.child for i, e in enumerate(tables.edges) if mask[i]],
+                    )
+                    
+                    tables.edges.add_row(left = site.id, right = site.id+1, parent=subtree.parent(node), child=node)
+    
+                    tables.sort()
+                    tables.mutations.clear()
+    
+                    hgt_tree = tables.tree_sequence()
+    
+                    hgt_trees[site.id].append((hgt_tree, (node, leaf_node)))
+                    
+                    keep = False
+                    for leaf in range(num_samples):
+                        if gene_absence_presence_matrix[site.id][leaf] == 1 and abs(
+                            hgt_tree.node(hgt_tree.at(hgt_tree.sites()[site.id].position).mrca(node, leaf)).time - mts.node(tree.mrca(node, leaf)).time) > hgt_difference_removal_threshold:
+                            keep = True
+                            break
+                    if keep:
+                        valid_nodes_hgt_events.append((node, leaf_node, hgt_origin))
+                    else:
+                        print("Removed HGT edge")
+            nodes_hgt_events[site.id] = valid_nodes_hgt_events
+    
+            """
+            # Add the present mutation(s) as an HGT node, if it lies on the core tree:
+            for mut in present_mutations[site.id]:
+                reachable_samples_from_gaining_mutations = set(tree.samples(mut.node))
+                if any(reachable_samples_from_gaining_mutations):
+                    nodes_hgt_events[site.id].append((mut.node, next(iter(reachable_samples_from_gaining_mutations))))
+                    print("Added HGT node")
+            """
+      
+                
+
     # Simulate the tree for each gene:
     
     """
@@ -516,21 +695,17 @@ def simulator(
         alleles=["C", "M"],
         root_distribution=[1.0, 0.0],  # nur C als Wurzel
         transition_matrix=[
-            # C     M1     
+            # C     M     
             [ 0.0,  1 ], 
             [ 1/3,  2/3],  
         ]
     )
 
-    """
+    
     nucleotide_mutation = msprime.InfiniteAlleles()
-    """
+    
     
     for i in range(num_genes): 
-
-        tables_gene_list[i].sort()
-        
-        gene_trees_list.append(tables_gene_list[i].tree_sequence())
         
         gene_trees_list[i] = msprime.sim_mutations(gene_trees_list[i], 
                                                    rate = nucleotide_mutation_rate, model = nucleotide_mutation, keep = True, random_seed=seed-1)
@@ -604,64 +779,7 @@ def simulator(
         alleles_list_pca.append(A_reconstructed)
     """
 
-    ### Compute the gene presence and absence:
-    
-    gene_absence_presence_matrix = []
-    
-    for var in mts.variants():
-        gene_absence_presence_matrix.append(var.genotypes)
-    gene_absence_presence_matrix = np.array(gene_absence_presence_matrix)
-
-    print("Number of present genes: ", sum(gene_absence_presence_matrix[0]))
-    
-    fitch_scores = fitch_parsimony_score(mts, gene_absence_presence_matrix)
-
-    ### Calculate the number of HGT events:
-
-    gene_number_hgt_events_passed = [0 for _ in range(num_genes)]
-    nodes_hgt_events = [[] for _ in range(num_genes)]
-    
-    for tree in mts.trees():
-        for site in tree.sites():
-
-            """
-            # Clonal_nodes is a boolean describing if a node is on the clonal tree and not some hgt branch:
-            clonal_nodes = defaultdict(list)
-            for node_id in range(mts.num_nodes):
-                clonal_nodes[node_id] = False
-            reached_nodes_from_leaves = copy.deepcopy(clonal_nodes)
-                
-            stack = [clonal_root_node]
-            clonal_nodes[clonal_root_node] = True
-            while stack:
-                node = stack.pop()
-                children = tree.children(node)
-                clonal_nodes[node] = True
-                stack.extend(children)
-
-            """
-            reached_nodes_from_leaves = defaultdict(list)
-            for node_id in range(mts.num_nodes):
-                reached_nodes_from_leaves[node_id] = False
-            
-            stack = []
-            for node_id in range(mts.num_samples):
-                if gene_absence_presence_matrix[site.id][node_id]:
-                    stack.append(node_id)
-                    
-            while stack:
-                node = stack.pop()
-                parent = tree.parent(node)
-                if not hgt_parent_children_passed[node] and not reached_nodes_from_leaves[node] and node < clonal_root_node:
-                    stack.append(parent)
-                    reached_nodes_from_leaves[node] = True
-                elif hgt_parent_children_passed[node] and not reached_nodes_from_leaves[node] and node < clonal_root_node:
-                    #print("HGT event spotted at node: ", node)
-                    nodes_hgt_events[site.id].append(node)
-                    gene_number_hgt_events_passed[site.id] += 1
-                    reached_nodes_from_leaves[node] = True
-            
-    
+        
     ### Calculate the distances between the leaves
 
     if distance_matrix is None:
@@ -755,9 +873,12 @@ def simulator(
 
     Graphs = []
     graph_properties = []
-    parental_nodes_hgt_events = [[] for _ in range(num_genes)]
-    parental_nodes_hgt_events_corrected = [[] for _ in range(num_genes)]
+    #parental_nodes_hgt_events = [[] for _ in range(num_genes)]
+    #parental_nodes_hgt_events_corrected = [[] for _ in range(num_genes)]
+    nodes_hgt_events_simplified = [[] for _ in range(num_genes)]
     children_gene_nodes_loss_events = [[] for _ in range(num_genes)]
+
+    HGTEvent = namedtuple("HGTEvent", ["recipient", "leaf", "donor"])
 
     for tree in mts.trees():
         for site in tree.sites():
@@ -770,11 +891,12 @@ def simulator(
             
             # Sortierte Nodes hinzufügen
             for node in sorted(all_nodes):
-                G.add_node(node, core_distance=0, allele_distance=0)
+                G.add_node(node, core_distance=0, allele_distance=0, true_allele_distance = 0, time = tree.get_time(node))
                 
             for parent, child_list in children.items():
                 for child in child_list:
-                    G.add_edge(child, parent)
+                    #G.add_edge(child, parent)
+                    G.add_edge(parent, child)
 
             # Add clonal distances:
             subtree_has_gene = {}
@@ -791,7 +913,7 @@ def simulator(
                     else:
                         subtree_has_gene[node] = False
 
-            for node in range(num_samples, clonal_root_node + 1):
+            for node in sorted(range(num_samples, clonal_root_node + 1), key=lambda n: tree.get_time(n)):
                 if node in G.nodes:
                     c0, c1 = children[node]  # Entpacke einmal
                     c0_has, c1_has = subtree_has_gene[c0], subtree_has_gene[c1]
@@ -800,7 +922,42 @@ def simulator(
                     if not (c0_has or c1_has):
                         continue
                 
+                    #if c0_has and c1_has:
+                    #    node_time = tree.get_time(node)
+                    #    core_distance = (
+                    #        2 * node_time
+                    #        - tree.get_time(c0) - tree.get_time(c1)
+                    #        + G.nodes[c0]["core_distance"]
+                    #        + G.nodes[c1]["core_distance"]
+                    #    )
                     if c0_has and c1_has:
+                        # Finde tiefste Kinderknoten, bei denen beide Subtrees True sind
+                        if c0 >= num_samples:
+                            d0, d1 = children[c0]
+                            while (not subtree_has_gene[d0] and subtree_has_gene[d1]) or (subtree_has_gene[d0] and not subtree_has_gene[d1]):
+                                if subtree_has_gene[d0]:
+                                    c0 = d0
+                                    if d0 < num_samples:
+                                        break
+                                elif subtree_has_gene[d1]:
+                                    c0 = d1
+                                    if d1 < num_samples:
+                                        break
+                                d0, d1 = children[c0]
+                                        
+                        if c1 >= num_samples:
+                            d0, d1 = children[c1]
+                            while (not subtree_has_gene[d0] and subtree_has_gene[d1]) or (subtree_has_gene[d0] and not subtree_has_gene[d1]):
+                                if subtree_has_gene[d0]:
+                                    c1 = d0
+                                    if d0 < num_samples:
+                                        break
+                                elif subtree_has_gene[d1]:
+                                    c1 = d1
+                                    if d1 < num_samples:
+                                        break
+                                d0, d1 = children[c1]
+             
                         node_time = tree.get_time(node)
                         core_distance = (
                             2 * node_time
@@ -814,14 +971,23 @@ def simulator(
                         core_distance = G.nodes[c1]["core_distance"]
 
                     G.nodes[node]["core_distance"] = core_distance
+                    
+            for node in range(num_samples, clonal_root_node + 1):
+                if node in G.nodes:
+                    G.nodes[node]["core_distance"] = (1 - (1 - 1/gene_length)**(G.nodes[node]["core_distance"] * nucleotide_mutation_rate * gene_length))
 
             # Multiply to get the expected amount of mutations:
+            """
             for node in range(num_samples, clonal_root_node + 1):
                 if node in G.nodes:
                     G.nodes[node]["core_distance"] = G.nodes[node]["core_distance"] * gene_length * nucleotide_mutation_rate
+            """
             
-            # Add allele distances:
+            #### Add allele distances:
+            
+            # Calculate for every node the number of SNPs below it.
             allele_distances = defaultdict(list)
+            allele_distances_both_children_polymorph = defaultdict(list)
             gene_present_bool = gene_absence_presence_matrix[site.id] == 1
             
             for node, leaves in node_to_leaf.items():
@@ -835,14 +1001,208 @@ def simulator(
                     subset = alleles_list[site.id][:, valid_cols]
                     distance = np.count_nonzero(np.ptp(subset, axis=1)) # ptp = max - min
                 allele_distances[tuple(leaves)] = distance
+
+            # Calculate for every node the number of SNPs below it which were not already SNPs in at least one of the children (new SNPs).
+            allele_distances_only_new = defaultdict(list)
+            gene_present_bool = gene_absence_presence_matrix[site.id] == 1
             
+            for node, leaves in node_to_leaf.items():
+                if alleles_list[site.id].ndim == 1:
+                    alleles_list[site.id] = np.zeros((1, num_samples), dtype=int)
+            
+                leaves_arr = np.array(leaves)
+                valid_cols = leaves_arr[gene_present_bool[leaves_arr]]
+            
+                if valid_cols.size == 0:
+                    new_distance = 0
+                    shared_distance = 0                    
+                else:
+                    subset = alleles_list[site.id][:, valid_cols]
+                    
+                    # Polymorphe Positionen im aktuellen Knoten
+                    polymorph_mask = np.ptp(subset, axis=1) > 0   # shape = [num_sites]
+                    
+                    # Kinder-Masken sammeln
+                    child_polymorph_mask_list = []
+                    for child in G.successors(node): 
+                        child_leaves = np.array(node_to_leaf[child])
+                        child_valid = child_leaves[gene_present_bool[child_leaves]]
+                        child_subset = alleles_list[site.id][:, child_valid]
+                    
+                        if child_valid.size > 0:
+                            child_mask = np.ptp(child_subset, axis=1) > 0
+                        else:
+                            child_mask = np.zeros(subset.shape[0], dtype=bool)
+                    
+                        child_polymorph_mask_list.append(child_mask)
+                    
+                    if child_polymorph_mask_list:
+                        # OR über alle Kinder -> Position polymorph in mind. einem Kind
+                        child_any_mask = np.logical_or.reduce(child_polymorph_mask_list)
+                    
+                        # AND über alle Kinder -> Position polymorph in allen Kindern
+                        if len(child_polymorph_mask_list) > 1:
+                            child_all_mask = np.logical_and.reduce(child_polymorph_mask_list)
+                        else:
+                            # nur ein Kind => all = that one
+                            #child_all_mask = child_polymorph_mask_list[0]
+                            child_all_mask = np.zeros_like(polymorph_mask)
+                    else:
+                        child_any_mask = np.zeros_like(polymorph_mask)
+                        child_all_mask = np.zeros_like(polymorph_mask)
+
+                    # Nur Positionen, die polymorph sind UND in allen Kindern noch monomorph
+                    new_polymorph_mask = polymorph_mask & (~child_any_mask)
+                    new_distance = np.count_nonzero(new_polymorph_mask)
+                    
+                    # Positionen, die in allen Kindern polymorph sind
+                    shared_polymorph_mask = polymorph_mask & child_all_mask
+                    shared_distance = np.count_nonzero(shared_polymorph_mask)
+                    
+                    
+                allele_distances_only_new[tuple(leaves)] = new_distance
+                allele_distances_both_children_polymorph[tuple(leaves)] = shared_distance
+
+
+            """
             for node in list(parents) + [clonal_root_node]:
                 G.nodes[node]["allele_distance"] = allele_distances[tuple(node_to_leaf[node])]
+            """
+
+            for node in list(parents) + [clonal_root_node]:
+                G.nodes[node]["allele_distance"] = allele_distances[tuple(node_to_leaf[node])] / gene_length
+                G.nodes[node]["allele_distance_only_new"] = allele_distances_only_new[tuple(node_to_leaf[node])] / gene_length
+                G.nodes[node]["allele_distances_both_children_polymorph"] = allele_distances_both_children_polymorph[tuple(node_to_leaf[node])] / gene_length
+
+            for gen_tree in gene_trees_list[site.id].trees():
+                for node in list(parents) + [clonal_root_node]:
+                    
+                    # Calculate the expected number of alleles, which also can be seen as the true allele distance:
+                    leaves = [leaf for leaf in node_to_leaf[node] if gene_absence_presence_matrix[site.id][leaf] == 1]
+                    if len(leaves) <= 1:
+                        G.nodes[node]["true_allele_distance"] = 0
+                    else:
+                        m = leaves[0]
+                        for u in leaves[1:]:
+                            m = gen_tree.mrca(m, u) # The most recent common ancestor of all leaves from the node
+                        
+                        visited_edges = set()
+                        total_length = 0.0 
+                        for leaf in leaves:
+                            u = leaf
+                            while u != tskit.NULL and u < m:
+                                p = gen_tree.parent(u)
+                                if p == tskit.NULL:
+                                    break
+                                edge = (p, u)
+                                if edge not in visited_edges:
+                                    visited_edges.add(edge)
+                                    total_length += gen_tree.time(p) - gen_tree.time(u)
+                                # weiter hoch
+                                u = p
+              
+                        # The expected proportion of SNPS:
+                        G.nodes[node]["true_allele_distance"] = (1 - (1 - 1/gene_length)**(total_length * nucleotide_mutation_rate * gene_length))
 
             # Set the numbers of the nodes in the graph to 0 to num_samples-1 :
             G_nodes_reordering = {old_label: new_label for new_label, old_label in enumerate(G.nodes())}
             nx.relabel_nodes(G, G_nodes_reordering, copy=False)
+
+            # Fix the origin of the HGT events:
+            corrected_hgt_events = []
+            corrected_hgt_events_simplified = []
+            for node, leaf, hgt_origin in nodes_hgt_events[site.id]:
+                hgt_origin = node + 1
+                while True:
+                    if hgt_origin in G_nodes_reordering.keys() and [leaf for leaf in tree.leaves(hgt_origin) if leaf < num_samples and gene_absence_presence_matrix[0][leaf] == 1]:
+                        break
+                    hgt_child = hgt_origin
+                    if not hgt_parent_children_passed_list[site.id][hgt_origin]:
+                        hgt_origin = tree.parent(hgt_origin)
+                    else:
+                        hgt_origin = hgt_origin + 1
+
+                if any([[leaf for leaf in tree.leaves(node) if leaf < num_samples and gene_absence_presence_matrix[0][leaf] == 1] == [] for node in tree.children(hgt_origin)]):
+                    hgt_child = hgt_origin
+                while True:
+                    if hgt_child != hgt_origin and hgt_child in G_nodes_reordering.keys():
+                        break
+                    children_hgt = tree.children(hgt_child)
+                    if len(children_hgt) == 1:
+                        hgt_child = children_hgt[0]
+                        counts = [1]
+                    else:
+                        counts = []
+                        for child in children_hgt:
+                            child_leaves = [leaf for leaf in tree.leaves(child) if leaf < num_samples]
+
+                            valid_leaves = [leaf for leaf in child_leaves if gene_absence_presence_matrix[site.id][leaf] == 1]
+                    
+                            counts.append((child, len(valid_leaves)))                      
+                            
+
+                        hgt_child = max(counts, key=lambda x: x[1])[0]
+              
+                #corrected_hgt_events.append((node, leaf, (hgt_origin, hgt_child)))
+            #nodes_hgt_events[site.id] = corrected_hgt_events
+
+            # Move nodes with HGT events to the right node.
+            #for node, leaf, hgt_origin in nodes_hgt_events[site.id]:
+                hgt_recipient_parent = node
+                hgt_recipient_child = node
+                while hgt_recipient_parent not in G_nodes_reordering.keys():
+                    hgt_recipient_parent = tree.parent(hgt_recipient_parent)
+                while hgt_recipient_child not in G_nodes_reordering.keys():
+                    children_hgt = tree.children(hgt_recipient_child)
+                    if len(children_hgt) == 1:
+                        hgt_recipient_child = children_hgt[0]
+                    else:
+                        counts = []
+                        for child in children_hgt:
+                            child_leaves = [leaf for leaf in tree.leaves(child) if leaf < num_samples]
+                            valid_leaves = [leaf for leaf in child_leaves if gene_absence_presence_matrix[site.id][leaf] == 1]
+                            counts.append((child, len(valid_leaves)))
+                        hgt_recipient_child = max(counts, key=lambda x: x[1])[0]
+
+                if hgt_recipient_parent <= clonal_root_node:
+                    event = HGTransfer(
+                        recipient_parent_node=hgt_recipient_parent,
+                        recipient_child_node=hgt_recipient_child,
+                        leaf=leaf,
+                        donor_parent_node=hgt_origin,
+                        donor_child_node=hgt_child,
+                    )
+                    corrected_hgt_events.append(event)
+                    event_simplified = HGTransfer(
+                        recipient_parent_node=G_nodes_reordering[hgt_recipient_parent],
+                        recipient_child_node=G_nodes_reordering[hgt_recipient_child],
+                        leaf=leaf,
+                        donor_parent_node=G_nodes_reordering[hgt_origin],
+                        donor_child_node=G_nodes_reordering[hgt_child],
+                    )
+                    corrected_hgt_events_simplified.append(event_simplified)
+                             
+            nodes_hgt_events[site.id] = corrected_hgt_events
+            nodes_hgt_events_simplified[site.id] = corrected_hgt_events_simplified
             
+            for node in gene_nodes_loss_events[site.id]:
+                stack = [node]
+                while stack:
+                    node = stack.pop()
+                    if node in G_nodes_reordering.keys():
+                        children_gene_nodes_loss_events[site.id].append(node)
+                        break
+                    else:
+                        if node >= num_samples:
+                            child_list = tree.children(node)
+                            stack.extend(child_list)
+
+            
+            #parental_nodes_hgt_events_corrected[site.id] = [G_nodes_reordering[node] for node in nodes_hgt_events[site.id]]
+            #parental_nodes_hgt_events[site.id] = [G_nodes_reordering[node] for node in parental_nodes_hgt_events[site.id]]
+            children_gene_nodes_loss_events[site.id] = [G_nodes_reordering[node] for node in children_gene_nodes_loss_events[site.id]]
+
+
             Graphs.append(G)
 
             # Process the graph to save it more easily:
@@ -852,44 +1212,17 @@ def simulator(
 
             node_features = []
             for node in graph_nodes:
-                core = G.nodes[node].get("core_distance", 0.0)
-                allele = G.nodes[node].get("allele_distance", 0.0)
-                node_features.append([core, allele])
+                core_distance = G.nodes[node].get("core_distance", 0.0)
+                allele_distance = G.nodes[node].get("allele_distance", 0.0)
+                allele_only_new = G.nodes[node].get("allele_distance_only_new", 0.0)
+                allele_distances_both_children_polymorph = G.nodes[node].get("allele_distances_both_children_polymorph", 0.0)
+                true_allele_distance = G.nodes[node].get("true_allele_distance", 0.0)
+                node_time = G.nodes[node].get("time", 0.0)
+                node_features.append([core_distance, allele_distance, allele_only_new, allele_distances_both_children_polymorph, true_allele_distance, node_time])
             node_features = torch.tensor(node_features, dtype=torch.float32)
 
             graph_properties.append([graph_nodes, graph_edge_index, node_features])
 
-            nodes_in_simplified_tree = list(parents) + [clonal_root_node]
-            for node in nodes_hgt_events[site.id]:
-                while node not in nodes_in_simplified_tree:
-                    node = tree.parent(node)
-                parental_nodes_hgt_events[site.id].append(node)
-            for node in gene_nodes_loss_events[site.id]:
-                stack = [node]
-                while stack:
-                    node = stack.pop()
-                    if node in nodes_in_simplified_tree:
-                        children_gene_nodes_loss_events[site.id].append(node)
-                        break
-                    else:
-                        if node >= num_samples:
-                            child_list = tree.children(node)
-                            stack.extend(child_list)
-                        #if node in hgt_parent_nodes:
-                        #    stack.append(node-1)
-
-            # Move nodes with HGT events to a higher node, if there are not enough genes present under it.
-            for hgt_node in parental_nodes_hgt_events[site.id]:
-                node = hgt_node
-                c0, c1 = children[node]
-                while not (subtree_has_gene[c0] and subtree_has_gene[c1]) and node < clonal_root_node:
-                    node = parents[node]
-                    c0, c1 = children[node]
-                parental_nodes_hgt_events_corrected[site.id].append(node)
-            
-            parental_nodes_hgt_events_corrected[site.id] = [G_nodes_reordering[node] for node in parental_nodes_hgt_events_corrected[site.id]]
-            parental_nodes_hgt_events[site.id] = [G_nodes_reordering[node] for node in parental_nodes_hgt_events[site.id]]
-            children_gene_nodes_loss_events[site.id] = [G_nodes_reordering[node] for node in children_gene_nodes_loss_events[site.id]]
        
     ### Print the computation time.
     
@@ -913,14 +1246,34 @@ def simulator(
         "clonal_root_node": clonal_root_node,
         "graphs": Graphs[0] if num_genes == 1 else Graphs,
         "graph_properties": graph_properties[0] if num_genes == 1 else graph_properties,
-        "parental_nodes_hgt_events": parental_nodes_hgt_events[0] if num_genes == 1 else parental_nodes_hgt_events,
+        "nodes_hgt_events_simplified": nodes_hgt_events_simplified[0] if num_genes == 1 else nodes_hgt_events_simplified,
         "nodes_hgt_events": nodes_hgt_events[0] if num_genes == 1 else nodes_hgt_events,
         "children_gene_nodes_loss_events": children_gene_nodes_loss_events[0] if num_genes == 1 else children_gene_nodes_loss_events,
         "node_to_leaf": node_to_leaf,
-        "parental_nodes_hgt_events_corrected": parental_nodes_hgt_events_corrected[0] if num_genes == 1 else parental_nodes_hgt_events_corrected,
+        #"parental_nodes_hgt_events_corrected": parental_nodes_hgt_events_corrected[0] if num_genes == 1 else parental_nodes_hgt_events_corrected,
         "G_nodes_reordering": G_nodes_reordering,
     }
 
+def deepest_both_has(node, children, subtree_has_gene):
+    """
+    Gehe vom gegebenen Knoten aus nach unten, solange beide Kinder das Gen haben.
+    Gibt den 'tiefsten' Knoten zurück, bei dem beide Subtrees True sind.
+    """
+    # Wenn Blatt, einfach zurück
+    if node not in children:
+        return node
+    
+    c0, c1 = children[node]
+    if subtree_has_gene[c0] and subtree_has_gene[c1]:
+        # Dann können wir noch tiefer gehen
+        # Rekursiv jeweils nach unten
+        c0_deep = deepest_both_has(c0, children, subtree_has_gene)
+        c1_deep = deepest_both_has(c1, children, subtree_has_gene)
+        # Hier entscheidest du, ob du beide zurückgeben willst oder einen
+        # -> für deinen Fall reicht es, den Knoten selbst zurückzugeben
+        return node
+    else:
+        return node
 
 def distance_core(tree_sequence: tskit.TreeSequence, num_samples: int) -> np.ndarray:
     """
@@ -1215,18 +1568,19 @@ def simulate_and_store(theta, rho, num_samples, num_genes, hgt_rate, ce_from_nwk
     data = simulator(theta = theta, rho = rho, num_samples = num_samples, num_genes = num_genes, hgt_rate = hgt_rate, ce_from_nwk = ce_from_nwk, distance_matrix = distance_matrix_core)
 
     graph_properties = data["graph_properties"]
-    parental_nodes_hgt_events = data["parental_nodes_hgt_events"]
+    nodes_hgt_events = data["nodes_hgt_events"]
     children_gene_nodes_loss_events = data["children_gene_nodes_loss_events"]
     gene_absence_presence_matrix = data["gene_absence_presence_matrix"]
     fitch_scores = data["fitch_scores"]
     gene_number_loss_events = data["gene_number_loss_events"]
     gene_number_hgt_events_passed = data["gene_number_hgt_events_passed"]
-    parental_nodes_hgt_events_corrected = data["parental_nodes_hgt_events_corrected"]
+    nodes_hgt_events_simplified = data["nodes_hgt_events_simplified"]
     
-    if gene_absence_presence_matrix.sum() > 0:
+    if gene_absence_presence_matrix.sum() > 1:
         # Dateiname pro Prozess eindeutig
         output_file = f"{output_dir}/simulation_results_{run_id}.h5"
-    
+
+        """
         with h5py.File(output_file, "w") as f:
             grp = f.create_group("results")
             grp.attrs["gene_absence_presence_matrix"] = gene_absence_presence_matrix
@@ -1235,9 +1589,87 @@ def simulate_and_store(theta, rho, num_samples, num_genes, hgt_rate, ce_from_nwk
             grp.attrs["fitch_score"] = fitch_scores
             grp.attrs["gene_number_hgt_events_passed"] = gene_number_hgt_events_passed
             grp.attrs["gene_number_loss_events"] = gene_number_loss_events
-            grp.attrs["parental_nodes_hgt_events_corrected"] = parental_nodes_hgt_events_corrected 
+            grp.attrs["nodes_hgt_events"] = nodes_hgt_events
+            grp.attrs["nodes_hgt_events_simplified"] = nodes_hgt_events_simplified 
             grp.attrs["children_gene_nodes_loss_events"] = children_gene_nodes_loss_events
             grp.create_dataset("graph_properties", data=np.void(pickle.dumps(graph_properties)))
+            
+            for site_id, events in nodes_hgt_events.items():
+                # convert list[HGTransfer] -> structured numpy array
+                arr = np.array([(ev.recipient_parent_node, ev.recipient_child_node, ev.leaf, ev.donor_parent_node, ev.donor_child_node) for ev in events], dtype=dtype)
+    
+                # store under key = site_id
+                grp.create_dataset(str(site_id), data=arr)
+
+            for site_id, events in nodes_hgt_events_simplified.items():
+                # convert list[HGTransfer] -> structured numpy array
+                arr = np.array([(ev.recipient_parent_node, ev.recipient_child_node, ev.leaf, ev.donor_parent_node, ev.donor_child_node) for ev in events], dtype=dtype)
+    
+                # store under key = site_id
+                grp.create_dataset(str(site_id), data=arr)
+        """
+
+        # Structured dtype for HGTransfer
+        dtype = np.dtype([
+            ("recipient_parent_node", np.int32),
+            ("recipient_child_node", np.int32),
+            ("leaf", np.int32),
+            ("donor_parent_node", np.int32),
+            ("donor_child_node", np.int32),
+        ])
+        
+        with h5py.File(output_file, "w") as f:
+            grp = f.create_group("results")
+        
+            # Simple attributes (nur primitive Typen/Arrays erlaubt!)
+            grp.attrs["hgt_rate"] = hgt_rate
+            grp.attrs["rho"] = rho
+            grp.attrs["gene_number_hgt_events_passed"] = gene_number_hgt_events_passed
+            grp.attrs["gene_number_loss_events"] = gene_number_loss_events
+        
+            # Falls die Matrizen/Arrays numpy-kompatibel sind, geht das:
+            grp.create_dataset("gene_absence_presence_matrix", data=gene_absence_presence_matrix)
+            grp.create_dataset("fitch_score", data=fitch_scores)
+            grp.create_dataset("children_gene_nodes_loss_events", data=children_gene_nodes_loss_events)
+        
+            # graph_properties als Pickle speichern
+            grp.create_dataset("graph_properties", data=np.void(pickle.dumps(graph_properties)))
+        
+            # Untergruppe für originale Events
+            hgt_grp = grp.create_group("nodes_hgt_events")
+            if isinstance(nodes_hgt_events, list) and len(nodes_hgt_events) > 0 and isinstance(nodes_hgt_events[0], HGTransfer):
+                nodes_hgt_events = [nodes_hgt_events]
+                nodes_hgt_events_simplified = [nodes_hgt_events_simplified]
+            for site_id, events in enumerate(nodes_hgt_events):
+                arr = np.array([
+                    (
+                        ev.recipient_parent_node,
+                        ev.recipient_child_node,
+                        ev.leaf,
+                        ev.donor_parent_node,
+                        ev.donor_child_node
+                    )
+                    for ev in events
+                ], dtype=dtype)
+            
+                hgt_grp.create_dataset(str(site_id), data=arr)
+        
+            # Untergruppe für vereinfachte Events
+            hgt_grp_simpl = grp.create_group("nodes_hgt_events_simplified")
+            for site_id, events in enumerate(nodes_hgt_events_simplified):
+                arr = np.array([
+                    (
+                        ev.recipient_parent_node,
+                        ev.recipient_child_node,
+                        ev.leaf,
+                        ev.donor_parent_node,
+                        ev.donor_child_node
+                    )
+                    for ev in events
+                ], dtype=dtype)
+            
+                hgt_grp_simpl.create_dataset(str(site_id), data=arr)
+        
     
     return output_dir     
 
@@ -1256,7 +1688,7 @@ def simulate_and_store_old(theta, rho, num_samples, num_genes, hgt_rate, ce_from
     gene_number_loss_events = data["gene_number_loss_events"]
     graphs = data["graphs"]
     
-    if gene_absence_presence_matrix.sum() > 0:
+    if gene_absence_presence_matrix.sum() > 1:
         # Dateiname pro Prozess eindeutig
         output_file = f"{output_dir}/simulation_results_{run_id}.h5"
     
@@ -1335,8 +1767,8 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
             
 if __name__ == '__main__':
     
-    num_simulations = 10000
-    same_core_tree = True
+    num_simulations = 1000
+    same_core_tree = False
 
     num_samples = 100
     num_genes = 1
