@@ -1,3 +1,15 @@
+import warnings
+warnings.filterwarnings("ignore", message="Signature .* for <class 'numpy.longdouble'> does not match any known type")
+
+import msprime
+import tskit
+import hgt_simulation
+import hgt_sim_args
+import numpy as np
+import networkx as nx
+import torch
+import h5py
+
 import os
 import re
 import time
@@ -15,21 +27,11 @@ from dataclasses import dataclass
 from typing import Union, Sequence, List, Tuple
 from concurrent.futures import ProcessPoolExecutor
 
-import msprime
-import tskit
-import hgt_simulation
-import hgt_sim_args
-import numpy as np
-import networkx as nx
-import torch
-import h5py
-
 from sbi.utils import BoxUniform
 from sklearn.decomposition import PCA
 from scipy.spatial.distance import pdist, squareform
 from numba import njit
 from networkx.readwrite import json_graph
-
 
 @dataclass
 class HGTransfer:
@@ -49,12 +51,10 @@ def simulator(
     num_genes: int = 1,
     nucleotide_mutation_rate: Union[float, None] = None,
     gene_length: int = 1000,
-    pca_dimensions: int = 10,
     ce_from_nwk: Union[str, None] = None,
     seed: Union[int, None] = None,
     distance_matrix: Union[np.ndarray, None] = None,
     multidimensional_scaling_dimensions: int = 100,
-    block_clustering_threshold: Union[float, Sequence[float]] = np.arange(0, 1.0001, 0.025),
     clonal_root_mutation: Union[bool, None] = None,
     hgt_difference_removal_threshold: float = 0,
 ) -> tskit.TreeSequence:
@@ -77,8 +77,6 @@ def simulator(
         Mutation rate per nucleotide.
     gene_length : int, default=1000
         Length of each gene.
-    pca_dimensions : int, default=10
-        Number of PCA dimensions to compute.
     ce_from_nwk : str or None
         Newick string for core tree (overrides num_samples).
     seed : int or None
@@ -87,8 +85,6 @@ def simulator(
         Optional distance matrix for MDS.
     multidimensional_scaling_dimensions : int, default=100
         Number of dimensions for MDS projection.
-    block_clustering_threshold : float or Sequence[float]
-        Threshold(s) for block clustering.
     clonal_root_mutation : bool or None
         Whether to apply mutations at the clonal root.
     hgt_difference_removal_threshold : float, default=0
@@ -149,8 +145,12 @@ def simulator(
         ce_from_nwk=ce_from_nwk,
         random_seed=seed,
     )
+
     ts, hgt_edges = hgt_simulation.run_simulate(args)
 
+    clonal_root_node = ts.first().mrca(*list(range(num_samples)))
+    print("Clonal node:", clonal_root_node)
+    
     # ------------------------------------------------------------
     # Place mutations in the simulated tree sequence
     # ------------------------------------------------------------
@@ -176,7 +176,7 @@ def simulator(
             model=gains_model,
             keep=True,
             random_seed=seed + k,
-            end_time=core_tree.node(core_tree.first().root).time,
+            end_time=ts.first().time(clonal_root_node),
         )
 
         tables = ts_gains.dump_tables()
@@ -219,8 +219,8 @@ def simulator(
 
     tables.mutations.clear()
 
-    clonal_root_node = ts_gains.first().mrca(*list(range(num_samples)))
-    print("Clonal node:", clonal_root_node)
+    #clonal_root_node = ts_gains.first().mrca(*list(range(num_samples)))
+    #print("Clonal node:", clonal_root_node)
 
     if clonal_root_mutation is None:
         clonal_root_mutation = random.random() < 0.5
@@ -684,7 +684,20 @@ def simulator(
     # ------------------------------------------------------------
     
     # Define a simple nucleotide mutation model or use infinite alleles
-    nucleotide_mutation = msprime.InfiniteAlleles()
+    #nucleotide_mutation = msprime.InfiniteAlleles()
+
+    nucleotide_mutation = msprime.MatrixMutationModel(
+        alleles=["A", "C", "T", "G", "-"],
+        root_distribution=[0.2, 0.2, 0.2, 0.2, 0.2], # Random distribution in the mcra of all samples
+        transition_matrix=[
+            # A      C      T      G      -
+            [ 0.00,  0.25,  0.25,  0.25,  0.25], 
+            [ 0.25,  0.00,  0.25,  0.25,  0.25],  
+            [ 0.25,  0.25,  0.00,  0.25,  0.25],  
+            [ 0.25,  0.25,  0.25,  0.00,  0.25],
+            [ 0.25,  0.25,  0.25,  0.25,  0.00],
+        ]
+    )
     
     # Place nucleotide mutations on each per-gene tree
     for i in range(num_genes):
@@ -694,8 +707,18 @@ def simulator(
     
     # Extract allele matrices for each gene
     alleles_list = []
+    nucleotide_sequences = []
     for i in range(num_genes):
         alleles_list.append(np.array([var.genotypes for var in gene_trees_list[i].variants()]))
+        
+        seq_matrix = []
+        for var in gene_trees_list[i].variants():
+            alleles = [a if a is not None else "-" for a in var.alleles]
+            seq_matrix.append([
+                alleles[g] if g >= 0 and g < len(alleles) else "-" for g in var.genotypes
+            ])
+        seq_matrix = np.array(seq_matrix).T
+        nucleotide_sequences.append(["".join(row) for row in seq_matrix])
 
     # ------------------------------------------------------------
     # Process every HGT and save it correctly
@@ -867,7 +890,8 @@ def simulator(
     (
         distance_matrix,
         scaled_distance_matrix,
-        alleles_list_pca,
+        scaled_alleles_differences,
+        alleles_differences,
         core_allel_distance_list,
     ) = compute_scaled_distances(
         mts=mts,
@@ -908,8 +932,10 @@ def simulator(
         "gene_absence_presence_matrix": (gene_absence_presence_matrix[0]
                                          if (num_genes == 1 and gene_absence_presence_matrix.ndim > 1)
                                          else (gene_absence_presence_matrix if num_genes > 1 else gene_absence_presence_matrix)),
-        "alleles_list_pca": alleles_list_pca[0] if num_genes == 1 else alleles_list_pca,
+        "alleles_differences": alleles_differences[0] if num_genes == 1 else alleles_differences,
+        "scaled_alleles_differences": scaled_alleles_differences[0] if num_genes == 1 else scaled_alleles_differences,
         "scaled_distance_matrix": scaled_distance_matrix,
+        "nucleotide_sequences": nucleotide_sequences[0] if num_genes == 1 else nucleotide_sequences,
         "fitch_scores": fitch_scores[0] if (num_genes == 1 and hasattr(fitch_scores, "__len__")) else fitch_scores,
         "gene_number_hgt_events_passed": (gene_number_hgt_events_passed[0] if num_genes == 1 else gene_number_hgt_events_passed),
         "distance_matrix": distance_matrix,
@@ -949,7 +975,7 @@ def compute_scaled_distances(
         The (possibly computed) core distance matrix.
     scaled_distance_matrix: np.ndarray
         Low-dimensional embedding of the core distance matrix.
-    alleles_list_pca: List[np.ndarray]
+    scaled_alleles_differences: List[np.ndarray]
         List of scaled allele-derived embeddings per gene.
     core_allel_distance_list: List[np.ndarray]
         Per-gene distance difference matrices (core - allele).
@@ -968,14 +994,16 @@ def compute_scaled_distances(
         distance_matrix, multidimensional_scaling_dimensions=multidimensional_scaling_dimensions
     )
 
-    alleles_list_pca = []
+    alleles_differences = []
+    scaled_alleles_differences = []
     core_allel_distance_list = []
     core_allel_distance_number_of_clusters = []
 
     for A in alleles_list:
         if A.shape[0] == 0:
             A_reconstructed = np.full((num_samples, multidimensional_scaling_dimensions), -1)
-            alleles_list_pca.append(A_reconstructed)
+            alleles_differences.append(A_reconstructed)
+            scaled_alleles_differences.append(A_reconstructed)
             core_allel_distance_list.append(np.array([]))
             core_allel_distance_number_of_clusters.append([])
             continue
@@ -983,39 +1011,62 @@ def compute_scaled_distances(
         gene_absent_vector = (A[0] == -1)
         gene_present_vector = ~gene_absent_vector
 
-        euclidean_distances = squareform(pdist(A.T, metric="euclidean"))
-        scaled_euclidean_distances = np.full((num_samples, multidimensional_scaling_dimensions), 0.0)
+        #euclidean_distances = squareform(pdist(A.T, metric="euclidean"))
+        hamming_distances = hamming_distance(A, ignore_missing=True, normalize=False)
+        alleles_differences.append(hamming_distances)
+        
+        scaled_hamming_distances = np.full((num_samples, multidimensional_scaling_dimensions), 0.0)
 
         if gene_present_vector.sum() > 0:
-            scaled_euclidean_distances[gene_present_vector, :] = multidimensional_scaling(
-                euclidean_distances[np.ix_(gene_present_vector, gene_present_vector)],
+            scaled_hamming_distances[gene_present_vector, :] = multidimensional_scaling(
+                hamming_distances[np.ix_(gene_present_vector, gene_present_vector)],
                 multidimensional_scaling_dimensions=multidimensional_scaling_dimensions,
             )
 
-        euclidean_distances[gene_absent_vector, :] = -1
-        euclidean_distances[:, gene_absent_vector] = -1
+        hamming_distances[gene_absent_vector, :] = -1
+        hamming_distances[:, gene_absent_vector] = -1
 
-        alleles_list_pca.append(scaled_euclidean_distances)
+        scaled_alleles_differences.append(scaled_hamming_distances)
 
         distance_matrix_valid = distance_matrix[np.ix_(gene_present_vector, gene_present_vector)]
-        euclidean_distances_valid = euclidean_distances[np.ix_(gene_present_vector, gene_present_vector)]
-        euclidean_distances_valid = euclidean_distances_valid ** 2
+        hamming_distances_valid = hamming_distances[np.ix_(gene_present_vector, gene_present_vector)]
+        #euclidean_distances_valid = euclidean_distances_valid ** 2
 
-        if gene_present_vector.sum() > 0 and np.max(euclidean_distances_valid) > 0:
-            euclidean_distances_valid = euclidean_distances_valid / np.mean(euclidean_distances_valid) * np.mean(
+        if gene_present_vector.sum() > 0 and np.max(hamming_distances_valid) > 0:
+            hamming_distances_valid = hamming_distances_valid / np.mean(hamming_distances_valid) * np.mean(
                 distance_matrix_valid
             )
 
-        core_allel_distance_valid = distance_matrix_valid - euclidean_distances_valid
+        core_allel_distance_valid = distance_matrix_valid - hamming_distances_valid
         core_allel_distance_list.append(core_allel_distance_valid)
 
     return (
         distance_matrix,
         scaled_distance_matrix,
-        alleles_list_pca,
+        scaled_alleles_differences,
+        alleles_differences,
         core_allel_distance_list,
         #core_allel_distance_number_of_clusters,
     )
+
+def hamming_distance(A, ignore_missing=True, normalize=False):
+    A = A.astype(np.int32)
+    n = A.shape[1]
+
+    # Expand to (n_samples, n_samples, n_sites)
+    eq = A.T[:, None, :] == A.T[None, :, :]
+    if ignore_missing:
+        valid = (A.T[:, None, :] != -1) & (A.T[None, :, :] != -1)
+        eq &= valid
+        denom = valid.sum(axis=2)
+        denom[denom == 0] = 1
+    else:
+        denom = A.shape[0]
+
+    diff = (~eq).sum(axis=2)
+    if normalize:
+        diff = diff / denom
+    return diff
 
 
 def build_graphs_from_mts(
@@ -1506,8 +1557,8 @@ def build_tree_mappings(tree: tskit.Tree, num_samples: int, clonal_root_node: in
 
 def simulate_and_store(num_samples, theta = 0, rho = 0, num_genes = 1, hgt_rate = 0, ce_from_nwk = None, distance_matrix_core = None, output_file = "simulation_result.h5"):
     # run_id für eindeutige Dateinamen
-    output_file = os.path.join(os.getcwd(), output_file)
-    
+    #output_file = os.path.join(os.getcwd(), output_file)
+
     data = simulator(theta = theta, rho = rho, num_samples = num_samples, num_genes = num_genes, hgt_rate = hgt_rate, ce_from_nwk = ce_from_nwk, distance_matrix = distance_matrix_core)
 
     graph_properties = data["graph_properties"]
@@ -1518,10 +1569,11 @@ def simulate_and_store(num_samples, theta = 0, rho = 0, num_genes = 1, hgt_rate 
     gene_number_loss_events = data["gene_number_loss_events"]
     gene_number_hgt_events_passed = data["gene_number_hgt_events_passed"]
     nodes_hgt_events_simplified = data["nodes_hgt_events_simplified"]
+    nucleotide_sequences = data["nucleotide_sequences"]
 
-    print(nodes_hgt_events)
+    print(nodes_hgt_events_simplified)
     
-    if gene_absence_presence_matrix.sum() > -1:
+    if gene_absence_presence_matrix.sum() > 0:
         
         # Structured dtype for HGTransfer
         dtype = np.dtype([
@@ -1545,6 +1597,7 @@ def simulate_and_store(num_samples, theta = 0, rho = 0, num_genes = 1, hgt_rate 
             grp.create_dataset("gene_absence_presence_matrix", data=gene_absence_presence_matrix)
             grp.create_dataset("fitch_score", data=fitch_scores)
             grp.create_dataset("children_gene_nodes_loss_events", data=children_gene_nodes_loss_events)
+            grp.create_dataset("nucleotide_sequences", data=nucleotide_sequences)
         
             # graph_properties als Pickle speichern
             grp.create_dataset("graph_properties", data=np.void(pickle.dumps(graph_properties)))
@@ -1585,3 +1638,97 @@ def simulate_and_store(num_samples, theta = 0, rho = 0, num_genes = 1, hgt_rate 
                 hgt_grp_simpl.create_dataset(str(site_id), data=arr)    
     
     return data
+
+def wrapper(args):
+    return simulate_and_store(*args)
+
+def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_samples, rho_samples, num_samples, num_genes):
+    if same_core_tree:
+        core_tree = msprime.sim_ancestry(
+            samples=num_samples,
+            sequence_length=1,
+            ploidy=1,
+            recombination_rate=0,
+            gene_conversion_rate=0,
+            gene_conversion_tract_length=1,
+        )
+        ce_from_nwk = core_tree.first().newick()
+
+        # The following is neccessary, since the number of the leaves are reordered:
+        args = hgt_sim_args.Args(
+            sample_size=num_samples,
+            num_sites=num_genes,
+            gene_conversion_rate=0,
+            recombination_rate=0,
+            hgt_rate=0,
+            ce_from_ts=None,
+            ce_from_nwk=ce_from_nwk,
+            random_seed=secrets.randbelow(2**32 - 4) + 2,
+        )
+        ts, hgt_edges = hgt_simulation.run_simulate(args)
+        
+        distance_matrix_core = distance_core(tree_sequence = ts, num_samples = num_samples)
+        #distance_matrix_core = multidimensional_scaling(distance_matrix_core, multidimensional_scaling_dimensions = multidimensional_scaling_dimensions)
+    else:
+        ce_from_nwk = None
+        distance_matrix_core = None
+
+    chunk_size = 1000
+    for start in range(0, num_simulations, chunk_size):
+        end = min(start + chunk_size, num_simulations)
+        args_list = [
+            (
+                num_samples,
+                theta,
+                rho_samples[idx].item(),
+                num_genes,
+                hgt_rate_samples[idx].item(),
+                ce_from_nwk,
+                distance_matrix_core,
+                os.path.join(output_dir, f"simulation_{idx}.h5")  # <-- hier der volle Pfad inkl. Dateiname
+            )
+            for idx in range(start, end)
+        ]
+
+        with ProcessPoolExecutor(max_workers=8) as executor:
+            list(executor.map(wrapper, args_list))
+
+
+if __name__ == '__main__':
+    
+    num_simulations = 200001
+    same_core_tree = False
+
+    num_samples = 5
+    num_genes = 1
+
+    ### Define random rates:
+
+    theta = 1
+    
+    hgt_rate_max = 5 # Maximum hgt rate
+    hgt_rate_min = 0 # Minimum hgt rate
+
+    rho_max = 3 # Maximum gene loss rate
+    rho_min = 0 # Minimum gene loss rate
+
+    prior_hgt_rate = BoxUniform(low=hgt_rate_min * torch.ones(1), high=hgt_rate_max * torch.ones(1))
+    prior_rho = BoxUniform(low=rho_min * torch.ones(1), high=rho_max * torch.ones(1))
+    
+    hgt_rate_samples, _ = torch.sort(prior_hgt_rate.sample((num_simulations,)))
+    rho_samples = prior_rho.sample((num_simulations,))
+
+    hgt_rate_samples = torch.linspace(0, hgt_rate_max, num_simulations)
+    
+    output_dir = r"C:\Users\uhewm\Desktop\ProjectHGT\simulation_chunks"
+    #output_dir = "/mnt/c/Users/uhewm/Desktop/ProjectHGT/simulation_chunks"
+    
+    # wenn Ordner existiert, komplett löschen
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # dann neu anlegen
+    os.makedirs(output_dir, exist_ok=True)
+
+    run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_samples, rho_samples, num_samples, num_genes)
