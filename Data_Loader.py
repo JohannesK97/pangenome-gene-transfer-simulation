@@ -2,14 +2,17 @@ import os
 import random
 import h5py
 import pickle
-import torch
 import networkx as nx
-from torch_geometric.data import Data
 import numpy as np
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import Linear, Sequential, ReLU, Dropout, BatchNorm1d
+from torch_geometric.data import Data
+from torch_geometric.nn import MessagePassing
 from typing import List, Tuple, Dict, Any
+
+
 
 def one_hot_encode(sequences, gene_present, max_number_of_snps, alphabet=['A','C','T','G','-']):
     """
@@ -292,9 +295,158 @@ def graph_to_dataset(G: nx.DiGraph):
         dtype=torch.float32
     )
 
-    #x = torch.cat([sum_x, num_leaves, num_present, node_time, x], dim=1)
-    x = torch.cat([sum_x, num_leaves, num_present, node_time], dim=1)
+    x = torch.cat([sum_x, num_leaves, num_present, node_time, x], dim=1)
+    #x = torch.cat([sum_x, num_leaves, num_present, node_time], dim=1)
 
     data = Data(x = x, edge_index = edge_index, y = y)
 
     return data
+
+
+def expected_and_observed_nucleotide_variants(hot_encoded_nucleotide_sequence_parent, hot_encoded_nucleotide_sequence_child_1, hot_encoded_nucleotide_sequence_child_2, time_parent, time_child_1, time_child_2):
+
+    nucleotide_mutation_rate = 0.1
+    
+    time = 2 * time_parent - time_child_1 - time_child_2
+    print("time", time)
+    gene_length = hot_encoded_nucleotide_sequence_child_1.shape[1]
+
+    hot_encoded_nucleotide_sequence_parent =  torch.maximum(
+        hot_encoded_nucleotide_sequence_parent, torch.tensor(0, dtype=torch.float32, device=hot_encoded_nucleotide_sequence_parent.device)
+    )
+    hot_encoded_nucleotide_sequence_child_1 = torch.maximum(
+        hot_encoded_nucleotide_sequence_child_1, torch.tensor(0, dtype=torch.float32, device=hot_encoded_nucleotide_sequence_child_1.device)
+    )
+    hot_encoded_nucleotide_sequence_child_2 = torch.maximum(
+        hot_encoded_nucleotide_sequence_child_2, torch.tensor(0, dtype=torch.float32, device=hot_encoded_nucleotide_sequence_child_2.device)
+    )
+
+    #nucleotide_variants_child_1 = hot_encoded_nucleotide_sequence_child_1.sum(dim=1)
+    #nucleotide_variants_child_2 = hot_encoded_nucleotide_sequence_child_2.sum(dim=1)
+
+    #hot_encoded_nucleotide_sequence_combined_children = min(hot_encoded_nucleotide_sequence_child_1 + hot_encoded_nucleotide_sequence_child_2, 1)
+
+    #hot_encoded_nucleotide_sequence_combined_children = torch.minimum(
+    #    hot_encoded_nucleotide_sequence_child_1 + hot_encoded_nucleotide_sequence_child_2,
+    #    torch.tensor(1, dtype=torch.float32, device=hot_encoded_nucleotide_sequence_child_1.device)
+    #)
+    
+    # Expected amount of new nucleotide variants (not regarding immediate back mutations):
+
+    possible_new_nucleotide_variants = gene_length * 5 - hot_encoded_nucleotide_sequence_parent.sum(dim=1)
+
+    expected_new_nucleotide_variants = possible_new_nucleotide_variants * (1 - torch.exp(-nucleotide_mutation_rate / 5 * time))
+    
+    # Observed nucleotide variants:
+
+    observed_new_nucleotide_variants = 1 / 2 * ((hot_encoded_nucleotide_sequence_parent - hot_encoded_nucleotide_sequence_child_1).sum(dim=1) + (hot_encoded_nucleotide_sequence_parent - hot_encoded_nucleotide_sequence_child_2).sum(dim=1))
+    
+    #(hot_encoded_nucleotide_sequence_parent - hot_encoded_nucleotide_sequence_combined_children).sum(dim=1) #- nucleotide_variants_child_1 - nucleotide_variants_child_2 + gene_length
+
+    print(expected_new_nucleotide_variants, observed_new_nucleotide_variants)
+
+    return expected_new_nucleotide_variants, observed_new_nucleotide_variants
+
+
+class ParentChildFusionLayer(MessagePassing):
+    """
+    A MessagePassing layer designed for tree-like graphs where each parent
+    has either exactly two children or none. For each parent node i, the
+    features of the parent and its two children (if present) are concatenated.
+
+    This layer does not use any attention or permutation-invariant
+    aggregation: child messages are collected explicitly and concatenated
+    in a fixed order. The user must ensure that each parent node has either
+    (0 or 2) incoming edges, and that the edge_index ordering encodes a
+    consistent left/right child order.
+
+    Input dimensions:
+        - Node feature dimension: in_dim
+        - Output feature dimension: out_dim
+
+    Output:
+        - New node embeddings of dimension out_dim
+    """
+
+    def __init__(self, in_dim):
+        # We do not use built-in aggregation ("add", "mean", ...) because
+        # we aggregate manually. Set aggr=None.
+            
+        # Each node will produce: [parent_features, child1, child2]
+        # If a node has no children, child features are zero-padded.
+        super().__init__(node_dim=0, aggr=None)
+
+        self.in_dim = in_dim
+
+    def message(self, x_j):
+        return x_j
+
+    def aggregate(self, inputs, index, ptr=None, dim_size=None):
+        """
+        Collect exactly two child feature vectors per parent.
+
+        inputs:  (num_edges, in_dim)
+        index:   (num_edges,) target node for each edge
+
+        Returns:
+            A tensor of shape (num_nodes, 2 * in_dim) containing the two
+            children features for each parent. Order is determined by
+            edge ordering and should be consistent in the dataset.
+        """
+
+        # Determine number of nodes from dim_size (preferred), fall back to index
+        if dim_size is not None:
+            num_nodes = dim_size
+        else:
+            num_nodes = int(index.max().item()) + 1
+
+        device = inputs.device
+
+        # Preallocate storage
+        children = torch.zeros(num_nodes, 2, self.in_dim, device=device)
+
+        # Compute for each edge its "child slot" 0 or 1
+        # Example: for index = [3,3,5,5], this produces [0,1,0,1]
+        slot = torch.zeros_like(index)
+        slot[1:] = (index[1:] == index[:-1]).long()
+
+        # Vectorized scatter operation
+        children[index, slot] = inputs
+
+        return children.reshape(num_nodes, 2 * self.in_dim)
+
+    def update(self, aggr_out, x):
+        """
+        aggr_out: (num_nodes, 2*in_dim) concatenated children features
+        x:        (num_nodes, in_dim)   parent features
+
+        Returns:
+            Fused parent representation → out_dim
+        """
+        d_x = x.size(1)
+
+        child_1 = aggr_out[:, :d_x]
+        child_2 = aggr_out[:, d_x:]
+        
+        time_parent = x[:, 3]
+        time_child_1 = child_1[:, 3]
+        time_child_2 = child_2[:, 3]
+
+        hot_encoded_nucleotide_sequence_parent = x[:, 4:]
+        hot_encoded_nucleotide_sequence_child_1 = child_1[:, 4:]
+        hot_encoded_nucleotide_sequence_child_2 = child_2[:, 4:]
+        
+        expected_and_observed_nucleotide_variants(hot_encoded_nucleotide_sequence_parent, hot_encoded_nucleotide_sequence_child_1, hot_encoded_nucleotide_sequence_child_2, time_parent, time_child_1, time_child_2)
+        
+        fused = torch.cat([x, aggr_out], dim=-1)
+        return fused
+
+    def forward(self, x, edge_index):
+        """
+        x: (num_nodes, in_dim)
+        edge_index: (2, num_edges), where edges point child -> parent
+
+        Returns:
+            Updated node embeddings (num_nodes, out_dim)
+        """
+        return self.propagate(edge_index, x=x)

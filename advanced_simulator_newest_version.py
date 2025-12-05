@@ -33,6 +33,9 @@ from scipy.spatial.distance import pdist, squareform
 from numba import njit
 from networkx.readwrite import json_graph
 
+GLOBAL_DISTANCE_MATRIX_CORE = None
+GLOBAL_CE_FROM_NWK = None
+
 @dataclass
 class HGTransfer:
     """Container for horizontal gene transfer events."""
@@ -1673,7 +1676,7 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
         ce_from_nwk = None
         distance_matrix_core = None
 
-    chunk_size = 1000
+    chunk_size = 100
     for start in range(0, num_simulations, chunk_size):
         end = min(start + chunk_size, num_simulations)
         args_list = [
@@ -1696,10 +1699,10 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
 
 if __name__ == '__main__':
     
-    num_simulations = 200001
+    num_simulations = 10000
     same_core_tree = False
 
-    num_samples = 5
+    num_samples = 100
     num_genes = 1
 
     ### Define random rates:
@@ -1720,8 +1723,8 @@ if __name__ == '__main__':
 
     hgt_rate_samples = torch.linspace(0, hgt_rate_max, num_simulations)
     
-    output_dir = r"C:\Users\uhewm\Desktop\ProjectHGT\simulation_chunks"
-    #output_dir = "/mnt/c/Users/uhewm/Desktop/ProjectHGT/simulation_chunks"
+    #output_dir = r"C:\Users\uhewm\Desktop\ProjectHGT\simulation_chunks"
+    output_dir = "/mnt/c/Users/uhewm/Desktop/ProjectHGT/simulation_chunks"
     
     # wenn Ordner existiert, komplett löschen
     if os.path.exists(output_dir):
