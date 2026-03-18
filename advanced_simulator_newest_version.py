@@ -33,8 +33,8 @@ from scipy.spatial.distance import pdist, squareform
 from numba import njit
 from networkx.readwrite import json_graph
 
-GLOBAL_DISTANCE_MATRIX_CORE = None
-GLOBAL_CE_FROM_NWK = None
+#GLOBAL_DISTANCE_MATRIX_CORE = None
+#GLOBAL_CE_FROM_NWK = None
 
 @dataclass
 class HGTransfer:
@@ -52,6 +52,7 @@ def simulator(
     rho: float = 0.3,
     hgt_rate: float = 0,
     num_genes: int = 1,
+    gene_gain_rate: float = 1,
     nucleotide_mutation_rate: Union[float, None] = None,
     gene_length: int = 1000,
     ce_from_nwk: Union[str, None] = None,
@@ -141,8 +142,8 @@ def simulator(
     args = hgt_sim_args.Args(
         sample_size=num_samples,
         num_sites=num_genes,
-        gene_conversion_rate=0,
-        recombination_rate=0,
+        gene_conversion_rate=0, # only hgt events are calculated
+        recombination_rate=0, # only hgt events are calculated
         hgt_rate=hgt_rate,
         ce_from_ts=None,
         ce_from_nwk=ce_from_nwk,
@@ -185,7 +186,7 @@ def simulator(
         tables = ts_gains.dump_tables()
         tables.mutations.clear()
 
-        # Keep only mutations that affect true sample leaves
+        # Keep only mutations that affect true sample leaves and do not land on hgt side branches.
         for tree in ts_gains.trees():
             for site in tree.sites():
                 for mut in site.mutations:
@@ -302,7 +303,7 @@ def simulator(
     # Create containers for per-site processing
     tables = ts_gains_losses.dump_tables()
     
-    # We'll rebuild the mutations table from selected events
+    # We will rebuild the mutations table from selected events
     tables.mutations.clear()
     
     # Prepare HGT mapping: parent -> list(child_parent_index)
@@ -872,9 +873,7 @@ def simulator(
                             stack_loss.extend(tree.children(n))
 
             children_gene_nodes_loss_events[site.id] = [G_nodes_reordering[node] for node in children_gene_nodes_loss_events[site.id] if node in G_nodes_reordering]
-
-
-    
+ 
     # ------------------------------------------------------------
     # From per-gene trees -> allele matrices, distances and graphs
     # ------------------------------------------------------------
@@ -918,6 +917,7 @@ def simulator(
         clonal_root_node=clonal_root_node,
         gene_length=gene_length,
         nucleotide_mutation_rate=nucleotide_mutation_rate,
+        nodes_hgt_events = nodes_hgt_events,
     )
 
     # ------------------------------------------------------------
@@ -1081,6 +1081,7 @@ def build_graphs_from_mts(
     clonal_root_node: int,
     gene_length: int,
     nucleotide_mutation_rate: float,
+    nodes_hgt_events: List,
 ) -> Tuple[List[nx.DiGraph], List]:
     
     """
@@ -1114,7 +1115,7 @@ def build_graphs_from_mts(
 
     Graphs = []
     graph_properties = []
-    nodes_hgt_events_simplified = [[] for _ in range(len(gene_trees_list))]
+    #nodes_hgt_events_simplified = [[] for _ in range(len(gene_trees_list))]
     children_gene_nodes_loss_events = [[] for _ in range(len(gene_trees_list))]
 
     for tree in mts.trees():
@@ -1305,6 +1306,16 @@ def build_graphs_from_mts(
                         G.nodes[node]["true_allele_distance"] = (
                             1 - (1 - 1 / gene_length) ** (total_length * nucleotide_mutation_rate * gene_length)
                         )
+            # Add information if a node is influenced by a hgt event, i.e. if there is a hgt backwards in time on the branch leading to the chosen node.
+            recipient_parent_nodes = set([t.recipient_parent_node for t in nodes_hgt_events[site.id]])
+
+            for node in sorted(list(range(num_samples)) + list(parents) + [clonal_root_node]):
+                if node < num_samples:
+                    G.nodes[node]["has_hgt_later_in_time"] = 0
+                elif any(child in recipient_parent_nodes for child in children[node]):
+                    G.nodes[node]["has_hgt_later_in_time"] = 1
+                else:
+                    G.nodes[node]["has_hgt_later_in_time"] = max([G.nodes[child]["has_hgt_later_in_time"] for child in children[node]])
 
             # Reorder nodes to contiguous indices and collect properties
             G_nodes_reordering = {old_label: new_label for new_label, old_label in enumerate(G.nodes())}
@@ -1326,8 +1337,10 @@ def build_graphs_from_mts(
                 )
                 true_allele_distance = G.nodes[node].get("true_allele_distance", 0.0)
                 node_time = G.nodes[node].get("time", 0.0)
+                has_hgt_later_in_time = G.nodes[node].get("has_hgt_later_in_time", 0.0)
                 node_features.append(
-                    [core_distance, allele_distance, allele_only_new, allele_distances_both_children_polymorph, true_allele_distance, node_time]
+                    [core_distance, allele_distance, allele_only_new, allele_distances_both_children_polymorph, 
+                     true_allele_distance, node_time, has_hgt_later_in_time]
                 )
             node_features = torch.tensor(node_features, dtype=torch.float32)
 
@@ -1576,7 +1589,7 @@ def simulate_and_store(num_samples, theta = 0, rho = 0, num_genes = 1, hgt_rate 
 
     print(nodes_hgt_events_simplified)
     
-    if gene_absence_presence_matrix.sum() > 0:
+    if gene_absence_presence_matrix.sum() > 1:
         
         # Structured dtype for HGTransfer
         dtype = np.dtype([
@@ -1693,7 +1706,7 @@ def run_simulation(same_core_tree, num_simulations, output_dir, theta, hgt_rate_
             for idx in range(start, end)
         ]
 
-        with ProcessPoolExecutor(max_workers=8) as executor:
+        with ProcessPoolExecutor(max_workers=6) as executor:
             list(executor.map(wrapper, args_list))
 
 
@@ -1723,8 +1736,10 @@ if __name__ == '__main__':
 
     hgt_rate_samples = torch.linspace(0, hgt_rate_max, num_simulations)
     
-    #output_dir = r"C:\Users\uhewm\Desktop\ProjectHGT\simulation_chunks"
-    output_dir = "/mnt/c/Users/uhewm/Desktop/ProjectHGT/simulation_chunks"
+    output_dir = r"C:\Users\uhewm\Desktop\ProjectHGT\simulation_chunks"
+    #output_dir = "/mnt/c/Users/uhewm/Desktop/ProjectHGT/simulation_chunks"
+
+    #output_dir = "/mnt/c/ProjectHGT/simulation_chunks"
     
     # wenn Ordner existiert, komplett löschen
     if os.path.exists(output_dir):
